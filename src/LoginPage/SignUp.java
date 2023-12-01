@@ -61,7 +61,7 @@ public class SignUp extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("CINEMA MEMPERSHIP");
+        jLabel9.setText("CINEMA MEMBERSHIP");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -83,7 +83,7 @@ public class SignUp extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel9)
-                .addContainerGap(292, Short.MAX_VALUE))
+                .addContainerGap(298, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
