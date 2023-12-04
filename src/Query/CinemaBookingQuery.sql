@@ -17,7 +17,7 @@ go
 create table BankAccount
 (
 	bankNumber int identity(1,1) primary key,
-	Users_userID int identity(1,1) not null,
+	Users_userID int not null,
 	CONSTRAINT FK_UsersBankAccount FOREIGN KEY (Users_userID) REFERENCES Users(userID),
 	moneyBA int
 )
@@ -26,9 +26,9 @@ go
 create table Reservation
 (
 	reserveID int identity(1,1) primary key,
-	User_userID int identity(1,1) not null,
+	User_userID int not null,
 	CONSTRAINT FK_PersonReservation FOREIGN KEY (User_userID) REFERENCES Users(userID),
-	Schedule_scheduleID int identity(1,1) not null,
+	Schedule_scheduleID int not null,
 	reserveDate datetime not null,
 )
 go
@@ -36,7 +36,7 @@ go
 create table Payment
 (
 	PaymentID int identity(1,1) primary key,
-	Reservation_reserveID int identity(1,1) not null,
+	Reservation_reserveID int not null,
 	CONSTRAINT FK_ReservationPayment FOREIGN KEY (Reservation_reserveID) REFERENCES Reservation(reserveID),
 	amount int not null,
 	paymentDate datetime
@@ -55,7 +55,7 @@ go
 create table Schedule
 (
 	scheduleID int identity(1,1) primary key,
-	Movies_movieID int identity(1,1),
+	Movies_movieID int not null,
 	CONSTRAINT FK_MoviesSchedule FOREIGN KEY (Movies_movieID) REFERENCES Movies(movieID),
 	Location_locationID int identity(1,1) not null,
 	DateSchedule datetime
@@ -95,11 +95,11 @@ go
 create table Location
 (
 	locationID int identity(1,1) primary key,
-	Seat_seatID int identity(1,1),
+	Seat_seatID int ,
 	CONSTRAINT FK_SeatLocation FOREIGN KEY (Seat_seatID) REFERENCES Seat(seatID),
-	Auditorium_auditoriumID int identity(1,1),
+	Auditorium_auditoriumID int ,
 	CONSTRAINT FK_AuditoriumLocation FOREIGN KEY (Auditorium_auditoriumID) REFERENCES Auditorium(auditoriumID),
-	Cinema_cinemaID int identity(1,1),
+	Cinema_cinemaID int ,
 	CONSTRAINT FK_CinemaLocation FOREIGN KEY (Cinema_cinemaID) REFERENCES Cinema(cinemaID)
 )
 go
