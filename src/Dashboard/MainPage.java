@@ -4,6 +4,7 @@
  */
 package Dashboard;
 import Connector.Connector;
+import Connector.SingletonConnect;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -265,8 +266,7 @@ public class MainPage extends javax.swing.JFrame {
     private void dashboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardBtnActionPerformed
         // TODO add your handling code here:
         jPanel2.setVisible(true);
-        Connector newConnector = new Connector();
-        try (Connection conn = newConnector.getConnection(); Statement stmt = conn.createStatement()) {
+        try (Connection conn = SingletonConnect.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
             String SQL ="SELECT DISTINCT M.movieName, C.cinemaName, M.genre, M.duration, M.directorName, S.scheduleDate, S.totalTicket, S.ticketsSold " +
                         "FROM Movies M " +
                         "JOIN Schedule S ON S.movieName = M.movieName " +
@@ -287,8 +287,7 @@ public class MainPage extends javax.swing.JFrame {
                 results.append("\n");
             }
             System.out.println(results.toString());
-            conn.abort(exctr);
-            newConnector.closeConnection();
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }    
