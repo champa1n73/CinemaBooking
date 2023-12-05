@@ -25,6 +25,7 @@ create table BankAccount
 	userID int,
 	bankNumber int primary key,
 	bankMoney money,
+	bankOTP int,
 
 	constraint FK_BankAccount_Users
 	foreign key (userID) references Users(userID)
@@ -57,15 +58,12 @@ create table Auditorium
 (
 	auditoriumID int identity(1, 1) primary key,
 	auditoriumName varchar(50),
-	totalSeats int,
-	seatsReserved int
 )
 
 create table Schedule
 (
 	scheduleID int identity(1, 1) primary key,
 	movieName varchar(50),
-	seatID int,
 	cinemaID int,
 	auditoriumID int,
 	scheduleDate datetime,
@@ -74,9 +72,6 @@ create table Schedule
 
 	constraint FK_Schedule_Movies
 	foreign key (movieName) references Movies(movieName),
-
-	constraint FK_Schedule_Seats
-	foreign key (seatID) references Seats(seatID),
 
 	constraint FK_Schedule_Cinemas
 	foreign key (cinemaID) references Cinemas(cinemaID),
@@ -90,6 +85,7 @@ create table Reservation
 	reserveID int identity(1, 1) primary key,
 	userID int,
 	scheduleID int,
+	seatID int,
 	reserveDate datetime,
 	paymentStatus varchar(20),
 
@@ -97,7 +93,10 @@ create table Reservation
 	foreign key (userID) references Users(userID),
 
 	constraint FK_Reservation_Schedule
-	foreign key (scheduleID) references Schedule(scheduleID)
+	foreign key (scheduleID) references Schedule(scheduleID),
+
+	constraint FK_Reservation_Seats
+	foreign key (seatID) references Seats(seatID)
 )
 
 create table Payment
@@ -114,3 +113,5 @@ create table Payment
 	constraint FK_Payment_Reservation
 	foreign key (reserveID) references Reservation(reserveID)
 )
+
+
