@@ -109,6 +109,7 @@ public class SignUp extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(204, 204, 204));
         jButton1.setText("Sign up");
+        jButton1.setFocusable(false);
 
         jLabel8.setText("I've an account");
 
