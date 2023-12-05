@@ -14,17 +14,17 @@ import Connector.Connector;
  * @author ASUS
  */
 public class LoginForm extends javax.swing.JFrame {
-    Connection con = null;
     ResultSet rs = null;
     PreparedStatement pst = null;
+    Connector conn = Connector.getInstance();
     /**
      * Creates new form LoginForm
      */
     public LoginForm() {
         initComponents();
         
-        Connector conn = new Connector();
-        con = conn.getConnection();
+        
+        
     }
 
     /**
@@ -212,7 +212,7 @@ public class LoginForm extends javax.swing.JFrame {
         try {
 
             String sql = "SELECT * FROM Users WHERE userName=? AND userPassword=?";
-            pst = con.prepareStatement(sql);
+            pst = conn.getConnection().prepareStatement(sql);
 
             pst.setString(1, un);//user name
             pst.setString(2, ps);//password
