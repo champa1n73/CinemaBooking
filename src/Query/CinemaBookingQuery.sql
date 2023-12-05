@@ -3,32 +3,26 @@ go
 use cinemabooking
 go
 
+
+
 create table Users
 (
-	userID int identity(1, 1) primary key,
-	firstName varchar(30),
-	lastName varchar(30)
-)
-
-create table userAccount
-(
-	userID int,
 	userName varchar(32) primary key,
 	userPassword varchar(32),
+	firstName varchar(20),
+	lastName varchar(20)
 
-	constraint FK_userAccount_Users
-	foreign key (userID) references users(userID)
 )
 
 create table BankAccount
 (
-	userID int,
+	userName varchar(32),
 	bankNumber int primary key,
 	bankMoney money,
 	bankOTP int,
 
 	constraint FK_BankAccount_Users
-	foreign key (userID) references Users(userID)
+	foreign key (userName) references Users(userName)
 )
 
 create table Movies
@@ -51,6 +45,8 @@ create table Auditorium
 	cinemaID int,
 	auditoriumID int identity(1, 1) primary key,
 	auditoriumName varchar(50),
+	rowSeat char(1),
+	numberSeat int,
 	
 	constraint FK_Auditorium_Cinemas
 	foreign key (cinemaID) references Cinemas(cinemaID)
@@ -60,8 +56,6 @@ create table Seats
 (
 	auditoriumID int,
 	seatID int identity(1, 1) primary key,
-	rowSeat char(1),
-	numberSeat int,
 	statusSeat varchar(20),
 
 	constraint FK_Seats_Auditorium
@@ -91,14 +85,14 @@ create table Schedule
 create table Reservation
 (
 	reserveID int identity(1, 1) primary key,
-	userID int,
+	userName varchar(32),
 	scheduleID int,
 	seatID int,
 	reserveDate datetime,
 	paymentStatus varchar(20),
 
 	constraint FK_Reservation_Users 
-	foreign key (userID) references Users(userID),
+	foreign key (userName) references Users(userName),
 
 	constraint FK_Reservation_Schedule
 	foreign key (scheduleID) references Schedule(scheduleID),
@@ -110,13 +104,13 @@ create table Reservation
 create table Payment
 (
 	paymentID int identity(1, 1) primary key,
-	userID int,
+	userName varchar(32),
 	reserveID int,
 	amount money,
 	paymentDate datetime,
 
 	constraint FK_Payment_Users
-	foreign key (userID) references Users(userID),
+	foreign key (userName) references Users(userName),
 
 	constraint FK_Payment_Reservation
 	foreign key (reserveID) references Reservation(reserveID)
