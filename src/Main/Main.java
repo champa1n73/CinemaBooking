@@ -12,9 +12,9 @@ import Connector.Connector;
  */
 public class Main {
     public static void main(String[] args) {
-        Connector connector = new Connector();
-        Connection conn = connector.getConnection();
+     
+        Connector conn = Connector.getInstance();
         
-        System.out.println(conn);
+        System.out.println(conn.getConnection());
     }
 }

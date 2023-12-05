@@ -1,14 +1,24 @@
 package Connector;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Connector {
+    private static Connector instance;
     private Connection conn = null;
 
-    // Constructor
-    public Connector() {
+    // Private constructor to prevent external instantiation
+    private Connector() {
         initializeConnection();
+    }
+
+    // Static method to get the instance of the singleton class
+    public static Connector getInstance() {
+        if (instance == null) {
+            instance = new Connector();
+        }
+        return instance;
     }
 
     // Method to initialize the database connection
@@ -17,7 +27,6 @@ public class Connector {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             try {
                 conn = DriverManager.getConnection("jdbc:sqlserver://sql.bsite.net\\MSSQL2016;encrypt=false;databaseName=giakhuong0703_Cinema;user=giakhuong0703_Cinema;password=khuong@07032003");
-                System.out.println(conn);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
