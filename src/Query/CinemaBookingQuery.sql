@@ -13,7 +13,7 @@ create table Users
 create table userAccount
 (
 	userID int,
-	userName varchar(32),
+	userName varchar(32) primary key,
 	userPassword varchar(32),
 
 	constraint FK_userAccount_Users
@@ -46,18 +46,26 @@ create table Cinemas
 	cinemaAddress varchar(100)
 )
 
+create table Auditorium
+(
+	cinemaID int,
+	auditoriumID int identity(1, 1) primary key,
+	auditoriumName varchar(50),
+	
+	constraint FK_Auditorium_Cinemas
+	foreign key (cinemaID) references Cinemas(cinemaID)
+)
+
 create table Seats
 (
+	auditoriumID int,
 	seatID int identity(1, 1) primary key,
 	rowSeat char(1),
 	numberSeat int,
-	statusSeat varchar(20)
-)
+	statusSeat varchar(20),
 
-create table Auditorium
-(
-	auditoriumID int identity(1, 1) primary key,
-	auditoriumName varchar(50),
+	constraint FK_Seats_Auditorium
+	foreign key (auditoriumID) references Auditorium(auditoriumID)
 )
 
 create table Schedule
