@@ -117,3 +117,5 @@ create table Payment
 )
 
 
+insert into Users
+values('giakhuong', '12345678', 'khuong', 'nguyen')
