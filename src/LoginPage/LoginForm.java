@@ -211,7 +211,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         try {
 
-            String sql = "SELECT * FROM userAccount WHERE userName=? AND userPassword=?";
+            String sql = "SELECT * FROM Users WHERE userName=? AND userPassword=?";
             pst = con.prepareStatement(sql);
 
             pst.setString(1, un);//user name
@@ -220,14 +220,12 @@ public class LoginForm extends javax.swing.JFrame {
             rs = pst.executeQuery();
 
             if (rs.next()) {//if true do
-
                 JOptionPane.showMessageDialog(jPanel1, "Loging in...");
 
                 //new Home(un).setVisible(true);//Set user name at Home
                 setVisible(false);
 
             } else {//if false do
-
                 JOptionPane.showMessageDialog(jPanel1, "Login failed!");
 
             }
