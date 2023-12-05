@@ -1,14 +1,24 @@
 package Connector;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Connector {
+    private static Connector instance;
     private Connection conn = null;
 
-    // Constructor
-    public Connector() {
+    // Private constructor to prevent external instantiation
+    private Connector() {
         initializeConnection();
+    }
+
+    // Static method to get the instance of the singleton class
+    public static Connector getInstance() {
+        if (instance == null) {
+            instance = new Connector();
+        }
+        return instance;
     }
 
     // Method to initialize the database connection
