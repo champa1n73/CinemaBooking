@@ -4,7 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Connector {
-    private Connection conn = null;
+    public static Connection conn = null;
 
     // Constructor
     public Connector() {
@@ -17,6 +17,7 @@ public class Connector {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             try {
                 conn = DriverManager.getConnection("jdbc:sqlserver://sql.bsite.net\\MSSQL2016;encrypt=false;databaseName=giakhuong0703_Cinema;user=giakhuong0703_Cinema;password=khuong@07032003");
+                System.out.println(conn);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
