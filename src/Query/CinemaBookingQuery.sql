@@ -45,8 +45,6 @@ create table Auditorium
 	cinemaID int,
 	auditoriumID int identity(1, 1) primary key,
 	auditoriumName varchar(50),
-	rowSeat char(1),
-	numberSeat int,
 	
 	constraint FK_Auditorium_Cinemas
 	foreign key (cinemaID) references Cinemas(cinemaID)
@@ -57,6 +55,7 @@ create table Seats
 	auditoriumID int,
 	seatID int identity(1, 1) primary key,
 	statusSeat varchar(20),
+	rowLocation varchar(10),
 
 	constraint FK_Seats_Auditorium
 	foreign key (auditoriumID) references Auditorium(auditoriumID)
