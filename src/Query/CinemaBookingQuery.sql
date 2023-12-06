@@ -27,7 +27,8 @@ create table BankAccount
 
 create table Movies
 (
-	movieName varchar(50) primary key,
+	movieID int identity(1, 1) primary key,
+	movieName varchar(50),
 	duration time,
 	genre varchar(20),
 	directorName varchar(50)
@@ -64,21 +65,18 @@ create table Seats
 create table Schedule
 (
 	scheduleID int identity(1, 1) primary key,
-	movieName varchar(50),
-	cinemaID int,
+	movieID int,
 	auditoriumID int,
 	scheduleDate datetime,
 	totalTicket int,
 	ticketsSold int,
 
 	constraint FK_Schedule_Movies
-	foreign key (movieName) references Movies(movieName),
-
-	constraint FK_Schedule_Cinemas
-	foreign key (cinemaID) references Cinemas(cinemaID),
+	foreign key (movieID) references Movies(movieID),
 
 	constraint FK_Schedule_Auditorium
 	foreign key (auditoriumID) references Auditorium(auditoriumID)
+	
 )
 
 create table Reservation
@@ -116,5 +114,5 @@ create table Payment
 )
 
 
-insert into Users
-values('giakhuong', '12345678', 'khuong', 'nguyen')
+
+	
