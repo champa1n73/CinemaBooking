@@ -1,1 +1,0 @@
-This folder only contains Query files.
