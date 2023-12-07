@@ -261,15 +261,16 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
-
+    
     private void dashboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardBtnActionPerformed
         // TODO add your handling code here:
         jPanel2.setVisible(true);
         try (Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
             String SQL ="SELECT DISTINCT M.movieName, C.cinemaName, M.genre, M.duration, M.directorName, S.scheduleDate, S.totalTicket, S.ticketsSold " +
                         "FROM Movies M " +
-                        "JOIN Schedule S ON S.movieName = M.movieName " +
-                        "JOIN Cinemas C ON C.cinemaID = S.cinemaID";
+                        "JOIN Schedule S ON S.movieID = M.movieID " +
+                        "JOIN Auditorium A ON A.auditoriumID = S.auditoriumID " +
+                        "JOIN Cinemas C ON C.cinemaID = A.cinemaID";
             ResultSet rs = stmt.executeQuery(SQL);
             StringBuilder results = new StringBuilder();
             ResultSetMetaData metaData = rs.getMetaData();
@@ -286,10 +287,10 @@ public class MainPage extends javax.swing.JFrame {
                 results.append("\n");
             }
             System.out.println(results.toString());
-            conn.close();
+            Connector.getInstance().closeConnection();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }    
+        } 
     }//GEN-LAST:event_dashboardBtnActionPerformed
 
     private void exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBtnActionPerformed
