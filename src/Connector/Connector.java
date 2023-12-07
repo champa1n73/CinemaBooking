@@ -45,6 +45,7 @@ public class Connector {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
+                instance = null;
             }
         } catch (SQLException e) {
             e.printStackTrace();
