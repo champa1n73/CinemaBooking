@@ -30,7 +30,7 @@ create table Movies
 	movieID int identity(1, 1) primary key,
 	movieName varchar(50) not null,
 	duration time not null,
-	genre varchar(20) not null,
+	genre varchar(50) not null,
 	directorName varchar(50) not null
 )
 
