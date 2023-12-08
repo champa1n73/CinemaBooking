@@ -77,10 +77,28 @@ WHILE @auditoriumID <= 25
 BEGIN
     SET @seatID = 1;
 
-    WHILE @seatID <= 30
+    WHILE @seatID <= 10
     BEGIN
         INSERT INTO Seats(auditoriumID, statusSeat, rowLocation)
-        VALUES (@auditoriumID, 0, 'Row ' + CAST(@seatID AS varchar(10)));
+        VALUES (@auditoriumID, 'Available', 'A' + CAST(@seatID AS varchar(10)));
+
+        SET @seatID = @seatID + 1;
+    END
+	SET @seatID = 1;
+
+    WHILE @seatID <= 10
+    BEGIN
+        INSERT INTO Seats(auditoriumID, statusSeat, rowLocation)
+        VALUES (@auditoriumID, 'Available', 'B' + CAST(@seatID AS varchar(10)));
+
+        SET @seatID = @seatID + 1;
+    END
+	SET @seatID = 1;
+
+    WHILE @seatID <= 10
+    BEGIN
+        INSERT INTO Seats(auditoriumID, statusSeat, rowLocation)
+        VALUES (@auditoriumID, 'Available', 'C' + CAST(@seatID AS varchar(10)));
 
         SET @seatID = @seatID + 1;
     END
@@ -100,8 +118,8 @@ BEGIN
 	DECLARE @a INT = 1;
 	WHILE @a <= 30
 	BEGIN
-		INSERT INTO dbo.Schedule (movieID, auditoriumID, scheduleDate, totalTicket, ticketsSold)
-		VALUES (@mID, (CAST(RAND()*25 AS INT) % 25) + 1, DATEADD(HOUR, CAST((RAND() * 24) AS INT), @date), 100, 0)    
+		INSERT INTO dbo.Schedule (movieID, auditoriumID, scheduleDate, totalTicket, ticketsSold, ticketPrice)
+		VALUES (@mID, (CAST(RAND()*25 AS INT) % 25) + 1, DATEADD(HOUR, CAST((RAND() * 24) AS INT), @date), 100, 0, 8)    
 		SET @a = @a + 1;
 	END
 	SET @mID = @mID + 1;
