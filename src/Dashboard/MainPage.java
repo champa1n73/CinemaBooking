@@ -4,12 +4,14 @@
  */
 package Dashboard;
 import Connector.Connector;
+import LoginPage.LoginForm;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -32,6 +34,8 @@ public class MainPage extends javax.swing.JFrame {
         };
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable1.setModel(defaultTableModel);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setVisible(true);
         setPanelFirst();
     }
 
@@ -53,7 +57,6 @@ public class MainPage extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         dashboardBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         exitBtn = new javax.swing.JButton();
@@ -116,15 +119,12 @@ public class MainPage extends javax.swing.JFrame {
 
         jButton6.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/log-out.png"))); // NOI18N
+        jButton6.setText("Sign Out");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
-
-        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel4.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel4.setText("Sign out");
 
         dashboardBtn.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         dashboardBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/dashboard.png"))); // NOI18N
@@ -149,10 +149,7 @@ public class MainPage extends javax.swing.JFrame {
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton6)
-                        .addGap(15, 15, 15)
-                        .addComponent(jLabel4))
+                    .addComponent(jButton6)
                     .addComponent(dashboardBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
@@ -176,9 +173,7 @@ public class MainPage extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jButton6)
                 .addGap(56, 56, 56))
         );
 
@@ -271,6 +266,9 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        new LoginForm();
+        this.dispose();
+        
     }//GEN-LAST:event_jButton6ActionPerformed
     
     private void dashboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardBtnActionPerformed
@@ -365,7 +363,6 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
