@@ -30,7 +30,7 @@ create table Movies
 	movieID int identity(1, 1) primary key,
 	movieName varchar(50) not null,
 	duration time not null,
-	genre varchar(20) not null,
+	genre varchar(50) not null,
 	directorName varchar(50) not null
 )
 
@@ -114,5 +114,29 @@ create table Payment
 	foreign key (reserveID) references Reservation(reserveID)
 )
 
+create table Review
+(
+	reviewID int identity(1, 1) primary key,
+	cinemaID int not null,
+	userName varchar(32) not null,
+	comment varchar(200) not null,
+	ratePoint int not null,
+
+	constraint FK_Review_Cinemas
+	foreign key (cinemaID) references Cinemas(cinemaID),
+
+	constraint FK_Review_Users
+	foreign key (userName) references Users(userName)
+)
+
+create table Rating
+(
+	ratingID int identity(1, 1) primary key,
+	cinemaID int not null,
+	totalRating float not null,
+
+	constraint FK_Rating_Cinemas
+	foreign key (cinemaID) references Cinemas(cinemaID)
+)
 
 
