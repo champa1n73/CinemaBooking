@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,6 +30,7 @@ public class MainPage extends javax.swing.JFrame {
                 return false;
             }
         };
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable1.setModel(defaultTableModel);
         setPanelFirst();
     }
@@ -203,6 +205,7 @@ public class MainPage extends javax.swing.JFrame {
                 "Movie", "Cinema", "Genre", "Duration", "Director", "Date", "Ticket", "Price"
             }
         ));
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -274,9 +277,10 @@ public class MainPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         jPanel2.setVisible(true);
         try (Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
-            String SQL = "SELECT DISTINCT M.movieName AS Movie, C.cinemaName AS Cinema, " +
-             "M.genre AS Genre, M.duration AS Duration, M.directorName AS Director, " +
-             "S.scheduleDate AS Date, (S.totalTicket - S.ticketsSold) AS Ticket, " +
+            String SQL = "SELECT DISTINCT S.scheduleID AS 'Order', M.movieName AS 'Movie', C.cinemaName AS 'Cinema', " +
+             "M.genre AS 'Genre', M.duration AS 'Duration', M.directorName AS 'Director', " +
+             "FORMAT(S.scheduleDate, 'yyyy-MM-dd HH:mm') AS 'Date', " +
+             "(S.totalTicket - S.ticketsSold) AS 'Ticket', " +
              "FORMAT(S.ticketPrice, 'N2') AS Price " +
              "FROM Movies M " +
              "JOIN Schedule S ON S.movieID = M.movieID " +
