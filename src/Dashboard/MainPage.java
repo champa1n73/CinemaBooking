@@ -10,18 +10,26 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author ADMIN
  */
 public class MainPage extends javax.swing.JFrame {
-    
+    DefaultTableModel defaultTableModel;
     /**
      * Creates new form MainPage
      */
     public MainPage() {
         initComponents();
+        defaultTableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        jTable1.setModel(defaultTableModel);
         setPanelFirst();
     }
 
@@ -186,13 +194,13 @@ public class MainPage extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Movie", "Cinema", "Genre", "Duration", "Director", "Date", "Ticket"
+                "Movie", "Cinema", "Genre", "Duration", "Director", "Date", "Ticket", "Price"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -216,7 +224,7 @@ public class MainPage extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(exitBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 734, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -266,25 +274,31 @@ public class MainPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         jPanel2.setVisible(true);
         try (Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
-            String SQL ="SELECT DISTINCT M.movieName, C.cinemaName, M.genre, M.duration, M.directorName, S.scheduleDate, S.totalTicket, S.ticketsSold " +
-                        "FROM Movies M " +
-                        "JOIN Schedule S ON S.movieID = M.movieID " +
-                        "JOIN Auditorium A ON A.auditoriumID = S.auditoriumID " +
-                        "JOIN Cinemas C ON C.cinemaID = A.cinemaID";
+            String SQL = "SELECT DISTINCT M.movieName AS Movie, C.cinemaName AS Cinema, " +
+             "M.genre AS Genre, M.duration AS Duration, M.directorName AS Director, " +
+             "S.scheduleDate AS Date, (S.totalTicket - S.ticketsSold) AS Ticket, " +
+             "FORMAT(S.ticketPrice, 'N2') AS Price " +
+             "FROM Movies M " +
+             "JOIN Schedule S ON S.movieID = M.movieID " +
+             "JOIN Auditorium A ON A.auditoriumID = S.auditoriumID " +
+             "JOIN Cinemas C ON C.cinemaID = A.cinemaID";
             ResultSet rs = stmt.executeQuery(SQL);
             StringBuilder results = new StringBuilder();
             ResultSetMetaData metaData = rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             for (int i = 1; i <= numberOfColumns; i++) {
-                results.append(metaData.getColumnName(i)).append("\t");
+                defaultTableModel.addColumn(metaData.getColumnName(i));
+//                results.append(metaData.getColumnName(i)).append("\t");
             }
             results.append("\n");
-            
+            Object[] rowData = new Object[numberOfColumns];
             while(rs.next()) {
                 for (int i = 1; i <= numberOfColumns; i++) {
-                results.append(rs.getObject(i)).append("\t");
+                    rowData[i - 1] = rs.getObject(i);
+//                    results.append(rs.getObject(i)).append("\t");
                 }
-                results.append("\n");
+                defaultTableModel.addRow(rowData);
+//                results.append("\n");
             }
             System.out.println(results.toString());
             Connector.getInstance().closeConnection();
