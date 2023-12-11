@@ -37,16 +37,16 @@ public class RatingPage extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         backBtn = new javax.swing.JButton();
-        movieNames = new javax.swing.JComboBox<>();
+        cinemaNames = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         formPn = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        mvNameLb = new javax.swing.JLabel();
+        cnNameLb = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        ratingCbox = new javax.swing.JComboBox<>();
+        cinemaCbox = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        movieCm = new javax.swing.JTextArea();
+        cinemaCm = new javax.swing.JTextArea();
         Submit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -59,34 +59,34 @@ public class RatingPage extends javax.swing.JFrame {
             }
         });
 
-        movieNames.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Movie name" }));
-        movieNames.setToolTipText("Movie names");
-        movieNames.addActionListener(new java.awt.event.ActionListener() {
+        cinemaNames.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cinema name" }));
+        cinemaNames.setToolTipText("Movie names");
+        cinemaNames.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                movieNamesActionPerformed(evt);
+                cinemaNamesActionPerformed(evt);
             }
         });
 
         formPn.setBackground(new java.awt.Color(204, 204, 204));
 
-        jLabel1.setText("Movie: ");
+        jLabel1.setText("Cinema:");
 
-        mvNameLb.setText("name");
+        cnNameLb.setText("name");
 
         jLabel3.setText("Rating:");
 
-        ratingCbox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5" }));
-        ratingCbox.addActionListener(new java.awt.event.ActionListener() {
+        cinemaCbox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5" }));
+        cinemaCbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ratingCboxActionPerformed(evt);
+                cinemaCboxActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Comment:");
 
-        movieCm.setColumns(20);
-        movieCm.setRows(5);
-        jScrollPane1.setViewportView(movieCm);
+        cinemaCm.setColumns(20);
+        cinemaCm.setRows(5);
+        jScrollPane1.setViewportView(cinemaCm);
 
         Submit.setText("Submit");
         Submit.addActionListener(new java.awt.event.ActionListener() {
@@ -112,10 +112,10 @@ public class RatingPage extends javax.swing.JFrame {
                                 .addGroup(formPnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(formPnLayout.createSequentialGroup()
                                         .addGap(32, 32, 32)
-                                        .addComponent(mvNameLb))
+                                        .addComponent(cnNameLb))
                                     .addGroup(formPnLayout.createSequentialGroup()
                                         .addGap(24, 24, 24)
-                                        .addComponent(ratingCbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(cinemaCbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jLabel4))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -130,11 +130,11 @@ public class RatingPage extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(formPnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(mvNameLb))
+                    .addComponent(cnNameLb))
                 .addGap(9, 9, 9)
                 .addGroup(formPnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(ratingCbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cinemaCbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -156,7 +156,7 @@ public class RatingPage extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(backBtn)
-                            .addComponent(movieNames, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cinemaNames, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -166,7 +166,7 @@ public class RatingPage extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(backBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(movieNames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cinemaNames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -200,26 +200,26 @@ public class RatingPage extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
-    private void movieNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movieNamesActionPerformed
+    private void cinemaNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cinemaNamesActionPerformed
         // TODO add your handling code here:
-        String selectedValue = movieNames.getSelectedItem().toString();
-        if (!selectedValue.equals("Movie name")) {
+        String selectedValue = cinemaNames.getSelectedItem().toString();
+        if (!selectedValue.equals("Cinema name")) {
             formPn.setVisible(true);
-            mvNameLb.setText(selectedValue);
+            cnNameLb.setText(selectedValue);
         } else {
             formPn.setVisible(false);
         }
-    }//GEN-LAST:event_movieNamesActionPerformed
+    }//GEN-LAST:event_cinemaNamesActionPerformed
 
-    private void ratingCboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ratingCboxActionPerformed
+    private void cinemaCboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cinemaCboxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ratingCboxActionPerformed
+    }//GEN-LAST:event_cinemaCboxActionPerformed
 
     private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
         // TODO add your handling code here:
-        String rating = ratingCbox.getSelectedItem().toString();
-        String movieName = mvNameLb.getText();
-        String comment = movieCm.getText();
+        String rating = cinemaCbox.getSelectedItem().toString();
+        String movieName = cnNameLb.getText();
+        String comment = cinemaCm.getText();
         try (Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
             String SQL = "INSERT INTO Review VALUES" +
                     "(" + movieName + ", " + comment + ", " + rating + ")";
@@ -233,15 +233,15 @@ public class RatingPage extends javax.swing.JFrame {
 
     private void getMovieNames() {
         try (Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
-            String SQL = "SELECT DISTINCT M.movieName AS 'Movie'" +
-             "FROM Movies M ";
+            String SQL = "SELECT DISTINCT C.cinemaName AS 'Cinema'" +
+             "FROM Cinemas C ";
             ResultSet rs = stmt.executeQuery(SQL);
             StringBuilder results = new StringBuilder();
             ResultSetMetaData metaData = rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
             while(rs.next()) {
                 for (int i = 1; i <= numberOfColumns; i++) {
-                    movieNames.addItem(rs.getObject(i).toString());
+                    cinemaNames.addItem(rs.getObject(i).toString());
                 }
             }
             System.out.println(results.toString());
@@ -287,6 +287,10 @@ public class RatingPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Submit;
     private javax.swing.JButton backBtn;
+    private javax.swing.JComboBox<String> cinemaCbox;
+    private javax.swing.JTextArea cinemaCm;
+    private javax.swing.JComboBox<String> cinemaNames;
+    private javax.swing.JLabel cnNameLb;
     private javax.swing.JPanel formPn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -294,9 +298,5 @@ public class RatingPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextArea movieCm;
-    private javax.swing.JComboBox<String> movieNames;
-    private javax.swing.JLabel mvNameLb;
-    private javax.swing.JComboBox<String> ratingCbox;
     // End of variables declaration//GEN-END:variables
 }

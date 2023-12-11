@@ -57,7 +57,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="backBtn" min="-2" max="-2" attributes="0"/>
-                              <Component id="movieNames" min="-2" pref="262" max="-2" attributes="0"/>
+                              <Component id="cinemaNames" min="-2" pref="262" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
@@ -72,7 +72,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="backBtn" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="movieNames" max="-2" attributes="0"/>
+                  <Component id="cinemaNames" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -91,17 +91,17 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backBtnActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JComboBox" name="movieNames">
+        <Component class="javax.swing.JComboBox" name="cinemaNames">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="1">
-                <StringItem index="0" value="Movie name"/>
+                <StringItem index="0" value="Cinema name"/>
               </StringArray>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Movie names"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="movieNamesActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cinemaNamesActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -133,11 +133,11 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
                                               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                              <Component id="mvNameLb" min="-2" max="-2" attributes="0"/>
+                                              <Component id="cnNameLb" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                                              <Component id="ratingCbox" min="-2" max="-2" attributes="0"/>
+                                              <Component id="cinemaCbox" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
@@ -161,12 +161,12 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="mvNameLb" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cnNameLb" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="ratingCbox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cinemaCbox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
@@ -182,10 +182,10 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Movie: "/>
+                <Property name="text" type="java.lang.String" value="Cinema:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="mvNameLb">
+            <Component class="javax.swing.JLabel" name="cnNameLb">
               <Properties>
                 <Property name="text" type="java.lang.String" value="name"/>
               </Properties>
@@ -195,7 +195,7 @@
                 <Property name="text" type="java.lang.String" value="Rating:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="ratingCbox">
+            <Component class="javax.swing.JComboBox" name="cinemaCbox">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="5">
@@ -208,7 +208,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ratingCboxActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cinemaCboxActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -226,7 +226,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextArea" name="movieCm">
+                <Component class="javax.swing.JTextArea" name="cinemaCm">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="5"/>
