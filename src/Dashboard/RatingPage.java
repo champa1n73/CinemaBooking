@@ -6,23 +6,36 @@ package Dashboard;
 
 import Connector.Connector;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author macbook
  */
 public class RatingPage extends javax.swing.JFrame {
+    DefaultTableModel defaultTableModel;
 
     /**
      * Creates new form RatingPage
      */
     public RatingPage() {
         initComponents();
-        getMovieNames();
+                defaultTableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setModel(defaultTableModel);
+        getCinemaRates();
+        getCinemaNames();
         formPn.setVisible(false);
     }
 
@@ -48,6 +61,8 @@ public class RatingPage extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         cinemaCm = new javax.swing.JTextArea();
         Submit = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -144,20 +159,34 @@ public class RatingPage extends javax.swing.JFrame {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Name", "Average"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(formPn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(formPn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(backBtn)
-                            .addComponent(cinemaNames, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(cinemaNames, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(backBtn))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -165,7 +194,9 @@ public class RatingPage extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(backBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
                 .addComponent(cinemaNames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -218,11 +249,11 @@ public class RatingPage extends javax.swing.JFrame {
     private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
         // TODO add your handling code here:
         String rating = cinemaCbox.getSelectedItem().toString();
-        String movieName = cnNameLb.getText();
+        String cinemaName = cnNameLb.getText();
         String comment = cinemaCm.getText();
         try (Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
             String SQL = "INSERT INTO Review VALUES" +
-                    "(" + movieName + ", " + comment + ", " + rating + ")";
+                    "(" + cinemaName + ", " + comment + ", " + rating + ")";
             System.out.println(SQL);
             ResultSet rs = stmt.executeQuery(SQL);
             System.out.println("Insert user comment succeed!");
@@ -231,8 +262,55 @@ public class RatingPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_SubmitActionPerformed
 
-    private void getMovieNames() {
-        try (Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
+    private void getCinemaRates() {
+        String connectionUrl = "jdbc:sqlserver://sql.bsite.net\\MSSQL2016;encrypt=false;databaseName=giakhuong0703_Cinema;user=giakhuong0703_Cinema;password=khuong@07032003";
+        try (Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement()) {
+            String SQL = "SELECT\n" +
+                    "    cinemaName AS 'Name',\n" +
+                    "    CAST(ROUND(CAST(SUM(ratePoint * num) AS FLOAT) / CAST(SUM(num) AS FLOAT), 2) AS DECIMAL(10, 2)) AS 'Average'\n" +
+                    "FROM (\n" +
+                    "    SELECT\n" +
+                    "        r.cinemaId,\n" +
+                    "        c.cinemaName,\n" +
+                    "        r.ratePoint,\n" +
+                    "        SUM(r.ratePoint) AS num\n" +
+                    "    FROM\n" +
+                    "        Review r\n" +
+                    "    JOIN Cinemas c ON r.cinemaId = c.cinemaId\n" +
+                    "    GROUP BY\n" +
+                    "        r.cinemaId,\n" +
+                    "        c.cinemaName,\n" +
+                    "        r.ratePoint\n" +
+                    ") AS subquery\n" +
+                    "GROUP BY\n" +
+                    "    cinemaName;";
+            ResultSet rs = stmt.executeQuery(SQL);
+            ResultSetMetaData metaData = rs.getMetaData();
+            int numberOfColumns = metaData.getColumnCount();
+            defaultTableModel.setRowCount(0);    // Clears rows
+            defaultTableModel.setColumnCount(0); // Clears columns
+
+            for (int i = 1; i <= numberOfColumns; i++) {
+                defaultTableModel.addColumn(metaData.getColumnName(i));
+            }
+
+            Object[] rowData = new Object[numberOfColumns];
+
+            while (rs.next()) {
+                for (int i = 1; i <= numberOfColumns; i++) {
+                    rowData[i - 1] = rs.getObject(i);
+                }
+                defaultTableModel.insertRow(0, rowData);
+            }
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    private void getCinemaNames() {
+        String connectionUrl = "jdbc:sqlserver://sql.bsite.net\\MSSQL2016;encrypt=false;databaseName=giakhuong0703_Cinema;user=giakhuong0703_Cinema;password=khuong@07032003";
+        try (Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement()) {
             String SQL = "SELECT DISTINCT C.cinemaName AS 'Cinema'" +
              "FROM Cinemas C ";
             ResultSet rs = stmt.executeQuery(SQL);
@@ -244,7 +322,7 @@ public class RatingPage extends javax.swing.JFrame {
                     cinemaNames.addItem(rs.getObject(i).toString());
                 }
             }
-            System.out.println(results.toString());
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } 
@@ -297,6 +375,8 @@ public class RatingPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
