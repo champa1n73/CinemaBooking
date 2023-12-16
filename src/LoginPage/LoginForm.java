@@ -229,10 +229,12 @@ public class LoginForm extends javax.swing.JFrame {
             rs = pst.executeQuery();
 
             if (rs.next()) {//if true do
+                
                 JOptionPane.showMessageDialog(jPanel1, "Loging in...");
 
                 //new Home(un).setVisible(true);//Set user name at Home
-                new MainPage();
+                MainPage mainPage = new MainPage(un);
+                conn.closeConnection();
                 this.dispose();
             Connector.getInstance().closeConnection();
             } else {//if false do
@@ -240,7 +242,7 @@ public class LoginForm extends javax.swing.JFrame {
 
             }
         } catch (SQLException e) {
-
+            System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 

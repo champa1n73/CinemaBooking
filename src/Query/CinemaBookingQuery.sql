@@ -85,9 +85,8 @@ create table Reservation
 	reserveID int identity(1, 1) primary key,
 	userName varchar(32) not null,
 	scheduleID int not null,
-	seatID int not null,
+	numberOfTickets int not null,
 	reserveDate datetime not null,
-	paymentStatus varchar(20) not null,
 
 	constraint FK_Reservation_Users 
 	foreign key (userName) references Users(userName),
@@ -95,8 +94,7 @@ create table Reservation
 	constraint FK_Reservation_Schedule
 	foreign key (scheduleID) references Schedule(scheduleID),
 
-	constraint FK_Reservation_Seats
-	foreign key (seatID) references Seats(seatID)
+
 )
 
 create table Payment
@@ -106,6 +104,7 @@ create table Payment
 	reserveID int not null,
 	amount money not null,
 	paymentDate datetime not null,
+	paymentStatus varchar(20) not null,
 
 	constraint FK_Payment_Users
 	foreign key (userName) references Users(userName),
@@ -139,4 +138,17 @@ create table Rating
 	foreign key (cinemaID) references Cinemas(cinemaID)
 )
 
+create table Tickets
+(
+	ticketID int identity(1, 1) primary key,
+	reserveID int not null,
+	seatID int not null,
 
+	constraint FK_Tickets_Reservation
+	foreign key (reserveID) references Reservation(reserveID),
+	
+	constraint FK_Tickets_Seats
+	foreign key (seatID) references Seats(seatID)
+)
+
+s
