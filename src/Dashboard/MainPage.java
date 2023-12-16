@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.sql.PreparedStatement;
@@ -40,6 +41,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -119,7 +121,7 @@ public class MainPage extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        ratingBtn = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         dashboardBtn = new javax.swing.JButton();
@@ -147,6 +149,29 @@ public class MainPage extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         alreadyPayTable = new javax.swing.JTable();
         payButton = new javax.swing.JButton();
+        moviepanel = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        showmovie = new javax.swing.JTable();
+        search = new javax.swing.JTextField();
+        jPanel4 = new javax.swing.JPanel();
+        label = new javax.swing.JLabel();
+        MT = new javax.swing.JLabel();
+        G = new javax.swing.JLabel();
+        D = new javax.swing.JLabel();
+        Di = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        mid = new javax.swing.JTextPane();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        mtitle = new javax.swing.JTextPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        mgenre = new javax.swing.JTextPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        mduration = new javax.swing.JTextPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        mdirector = new javax.swing.JTextPane();
+        TITLE = new javax.swing.JLabel();
+        btnSelect = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 204));
@@ -154,6 +179,7 @@ public class MainPage extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(59, 208, 208));
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jPanel1.setPreferredSize(new java.awt.Dimension(200, 788));
 
         jLabel2.setBackground(new java.awt.Color(255, 255, 255));
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -170,7 +196,7 @@ public class MainPage extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/add.png"))); // NOI18N
-        jButton2.setText("Add Movies");
+        jButton2.setText("Movies");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -186,12 +212,12 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/edit.png"))); // NOI18N
-        jButton4.setText("Edit Screening");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        ratingBtn.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        ratingBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/edit.png"))); // NOI18N
+        ratingBtn.setText("Rating");
+        ratingBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                ratingBtnActionPerformed(evt);
             }
         });
 
@@ -242,7 +268,7 @@ public class MainPage extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ratingBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton6)
                     .addComponent(dashboardBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -265,7 +291,7 @@ public class MainPage extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(ratingBtn)
                 .addGap(18, 18, 18)
                 .addComponent(jButton5)
                 .addGap(18, 18, 18)
@@ -571,15 +597,37 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        jPanel2.setVisible(false);
+        moviepanel.setVisible(true);
+        try(Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()){
+            String sql = "SELECT * FROM Movies";
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                String MovieID = String.valueOf(rs.getInt("MovieID"));
+                String Title = String.valueOf(rs.getString("Title"));
+                String Genre = String.valueOf(rs.getString("Genre"));
+                String Duration = String.valueOf(rs.getTime("Duration"));
+                String Director = String.valueOf(rs.getString("Director"));
+                
+                String tbData[] = {MovieID, Title, Genre, Duration, Director};
+                DefaultTableModel model = (DefaultTableModel)showmovie.getModel();
+                model.addRow(tbData);
+            }
+            
+    }catch (SQLException e) {
+            System.out.println(e.getMessage());
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void ratingBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ratingBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        RatingPage rp = new RatingPage();
+        rp.setVisible(true);
+    }//GEN-LAST:event_ratingBtnActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
@@ -594,6 +642,7 @@ public class MainPage extends javax.swing.JFrame {
     
     private void dashboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardBtnActionPerformed
         // TODO add your handling code here:
+        moviepanel.setVisible(false);
         cardLayout.show(cardPanel, "dashboardCard");
         maxTickets = 0;
         ticketLabel.setText(String.valueOf(maxTickets));
@@ -1109,6 +1158,8 @@ public class MainPage extends javax.swing.JFrame {
             int numberOfColumns = metaData.getColumnCount();
             defaultTableModel.setColumnCount(0);
             defaultTableModel.setRowCount(0);
+            defaultTableModel.setRowCount(0);    // Clears rows
+            defaultTableModel.setColumnCount(0); // Clears columns
             for (int i = 1; i <= numberOfColumns; i++) {
                 defaultTableModel.addColumn(metaData.getColumnName(i));
 //                results.append(metaData.getColumnName(i)).append("\t");
@@ -1124,17 +1175,48 @@ public class MainPage extends javax.swing.JFrame {
 //                results.append("\n");
             }
             rearrangeTable1(numberOfColumns);
-            Connector.getInstance().closeConnection();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } 
     }
     
+    private void showmovieMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showmovieMouseClicked
+        // TODO add your handling code here:
+        int row = showmovie.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel)showmovie.getModel();
+
+        mid.setText(model.getValueAt(row, 0).toString());
+        mtitle.setText(model.getValueAt(row, 1).toString());
+        mgenre.setText(model.getValueAt(row, 2).toString());
+        mduration.setText(model.getValueAt(row, 3).toString());
+        mdirector.setText(model.getValueAt(row, 4).toString());
+    }//GEN-LAST:event_showmovieMouseClicked
+
+    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
+        // TODO add your handling code here:
+        search.setText("");
+    }//GEN-LAST:event_searchMouseClicked
+
+    private void searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchKeyReleased
+        // TODO add your handling code here:
+        DefaultTableModel obj = (DefaultTableModel)showmovie.getModel();
+        TableRowSorter<DefaultTableModel> objl = new TableRowSorter<>(obj);
+        showmovie.setRowSorter(objl);
+        objl.setRowFilter(RowFilter.regexFilter(search.getText()));
+
+    }//GEN-LAST:event_searchKeyReleased
+
+    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
+        // TODO add your handling code here:
+        TITLE.setText(mtitle.getText());
+    }//GEN-LAST:event_btnSelectActionPerformed
+
     private void setPanelFirst() {
         screenLabel.setVisible(false);
         seatControlPanel.setVisible(true);
         audiPanel.setVisible(true);
         dashBoardPanel.setVisible(true);
+        moviepanel.setVisible(false);
     }
     /**
      * @param args the command line arguments
@@ -1178,10 +1260,15 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JPanel cardPanel;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JPanel dashBoardPanel;
+    private javax.swing.JLabel D;
+    private javax.swing.JLabel Di;
+    private javax.swing.JLabel G;
+    private javax.swing.JLabel MT;
+    private javax.swing.JLabel TITLE;
+    private javax.swing.JButton btnSelect;
     private javax.swing.JButton dashboardBtn;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
@@ -1193,10 +1280,18 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton payButton;
     private javax.swing.JPanel paymentPanel;
@@ -1206,6 +1301,16 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JPanel seatControlPanel;
     private javax.swing.JPanel seatPanel;
     private javax.swing.JLabel ticketLabel;
+    private javax.swing.JLabel label;
+    private javax.swing.JTextPane mdirector;
+    private javax.swing.JTextPane mduration;
+    private javax.swing.JTextPane mgenre;
+    private javax.swing.JTextPane mid;
+    private javax.swing.JPanel moviepanel;
+    private javax.swing.JTextPane mtitle;
+    private javax.swing.JButton ratingBtn;
+    private javax.swing.JTextField search;
+    private javax.swing.JTable showmovie;
     // End of variables declaration//GEN-END:variables
     
     // Align center the contents in Dashboard
