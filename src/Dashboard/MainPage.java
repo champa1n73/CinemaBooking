@@ -3,20 +3,127 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Dashboard;
+import Connector.Connector;
+import LoginPage.LoginForm;
+import java.awt.CardLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.LayoutManager;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.sql.PreparedStatement;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author ADMIN
  */
 public class MainPage extends javax.swing.JFrame {
+    DefaultTableModel defaultTableModel, defaultReservedModel, defaultPaymentModel, defaultAlreadyPayModel, defaultCinemaModel;
+    private String loginUsername;
+    private JRadioButton[] seatButton = new JRadioButton[30];
+    private int ticketSelected, maxTickets, buyNotify;
+    private boolean isDashboardShowing, isReservationShowing, isCinemaShowing, isRatingShowing = false;
 
-    /**
-     * Creates new form MainPage
-     */
-    public MainPage() {
-        initComponents();
+    public boolean isIsRatingShowing() {
+        return isRatingShowing;
     }
 
+    public void setIsRatingShowing(boolean isRatingShowing) {
+        this.isRatingShowing = isRatingShowing;
+    }
+    private Queue<String> rowLocation_Q = new LinkedList<>();
+    private Queue<Integer> seatID_Q = new LinkedList<>();
+    private Stack<Integer> paymentID_S = new Stack<>();
+    CardLayout cardLayout;
+    /**
+     * Creates new form MainPage
+     * @param username
+     */
+    public MainPage(String username) {
+        this.loginUsername = username;
+        initComponents();
+        cardLayout = (CardLayout) cardPanel.getLayout();
+        ticketLabel.setText(Integer.toString(ticketSelected));
+        jLabel3.setText(username);
+        defaultTableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        defaultReservedModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        defaultPaymentModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        defaultAlreadyPayModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        defaultCinemaModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        dashboardTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        dashboardTable.setModel(defaultTableModel);
+        reservedTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        reservedTable.setModel(defaultReservedModel);
+        paymentTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        paymentTable.setModel(defaultPaymentModel);
+        alreadyPayTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        alreadyPayTable.setModel(defaultAlreadyPayModel);
+        cinemaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        cinemaTable.setModel(defaultCinemaModel);
+        
+        setPanelFirst();
+        showDashboard();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setVisible(true);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,22 +133,1326 @@ public class MainPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        ratingBtn = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        dashboardBtn = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        cardPanel = new javax.swing.JPanel();
+        dashBoardPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dashboardTable = new javax.swing.JTable();
+        controlPanel = new javax.swing.JPanel();
+        seatControlPanel = new javax.swing.JPanel();
+        audiPanel = new javax.swing.JPanel();
+        seatPanel = new javax.swing.JPanel();
+        screenLabel = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        buyButton = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jButton8 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        ticketLabel = new javax.swing.JLabel();
+        paymentPanel = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        reservedTable = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        paymentTable = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        alreadyPayTable = new javax.swing.JTable();
+        payButton = new javax.swing.JButton();
+        moviePanel = new javax.swing.JPanel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        cinemaTable = new javax.swing.JTable();
+        moviepanel = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        showmovie = new javax.swing.JTable();
+        search = new javax.swing.JTextField();
+        jPanel4 = new javax.swing.JPanel();
+        label = new javax.swing.JLabel();
+        MT = new javax.swing.JLabel();
+        G = new javax.swing.JLabel();
+        D = new javax.swing.JLabel();
+        Di = new javax.swing.JLabel();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        mid = new javax.swing.JTextPane();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        mtitle = new javax.swing.JTextPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        mgenre = new javax.swing.JTextPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        mduration = new javax.swing.JTextPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        mdirector = new javax.swing.JTextPane();
+        TITLE = new javax.swing.JLabel();
+        btnSelect = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(204, 204, 204));
+        setSize(new java.awt.Dimension(1280, 760));
+
+        jPanel1.setBackground(new java.awt.Color(59, 208, 208));
+        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jPanel1.setPreferredSize(new java.awt.Dimension(200, 788));
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/user.png"))); // NOI18N
+        jLabel2.setToolTipText("");
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jLabel1.setText("Welcome");
+
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
+        jLabel3.setText("Admin");
+
+        jButton2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/add.png"))); // NOI18N
+        jButton2.setText("All Branches");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        ratingBtn.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        ratingBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/edit.png"))); // NOI18N
+        ratingBtn.setText("Rating");
+        ratingBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ratingBtnActionPerformed(evt);
+            }
+        });
+
+        jButton6.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/log-out.png"))); // NOI18N
+        jButton6.setText("Sign Out");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        dashboardBtn.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        dashboardBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/dashboard.png"))); // NOI18N
+        dashboardBtn.setText("Dashboard");
+        dashboardBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dashboardBtnActionPerformed(evt);
+            }
+        });
+
+        jButton9.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jButton9.setText("Payment");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(11, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ratingBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6)
+                    .addComponent(dashboardBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addGap(69, 69, 69)
+                .addComponent(dashboardBtn)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addGap(18, 18, 18)
+                .addComponent(ratingBtn)
+                .addGap(18, 18, 18)
+                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                .addComponent(jButton6)
+                .addContainerGap(58, Short.MAX_VALUE))
+        );
+
+        cardPanel.setLayout(new java.awt.CardLayout());
+
+        dashBoardPanel.setBackground(new java.awt.Color(204, 204, 204));
+        dashBoardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+
+        dashboardTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        dashboardTable.setFocusable(false);
+        dashboardTable.setShowVerticalLines(true);
+        dashboardTable.getTableHeader().setReorderingAllowed(false);
+        dashboardTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dashboardTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(dashboardTable);
+
+        controlPanel.setBackground(new java.awt.Color(204, 204, 204));
+        controlPanel.setLayout(new java.awt.GridLayout(1, 3));
+
+        seatControlPanel.setBackground(new java.awt.Color(255, 255, 255));
+        seatControlPanel.setFocusable(false);
+
+        audiPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        seatPanel.setBackground(new java.awt.Color(255, 255, 255));
+        seatPanel.setLayout(new java.awt.GridLayout(3, 10));
+
+        screenLabel.setBackground(new java.awt.Color(0, 255, 204));
+        screenLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        screenLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        screenLabel.setText("Screen");
+        screenLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        screenLabel.setOpaque(true);
+        screenLabel.setPreferredSize(new java.awt.Dimension(292, 47));
+
+        javax.swing.GroupLayout audiPanelLayout = new javax.swing.GroupLayout(audiPanel);
+        audiPanel.setLayout(audiPanelLayout);
+        audiPanelLayout.setHorizontalGroup(
+            audiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(audiPanelLayout.createSequentialGroup()
+                .addGroup(audiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(audiPanelLayout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(screenLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                        .addGap(55, 55, 55))
+                    .addGroup(audiPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(seatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        audiPanelLayout.setVerticalGroup(
+            audiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, audiPanelLayout.createSequentialGroup()
+                .addComponent(screenLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(seatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout seatControlPanelLayout = new javax.swing.GroupLayout(seatControlPanel);
+        seatControlPanel.setLayout(seatControlPanelLayout);
+        seatControlPanelLayout.setHorizontalGroup(
+            seatControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(seatControlPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(audiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        seatControlPanelLayout.setVerticalGroup(
+            seatControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(seatControlPanelLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(audiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(65, Short.MAX_VALUE))
+        );
+
+        controlPanel.add(seatControlPanel);
+
+        buyButton.setBackground(new java.awt.Color(51, 153, 0));
+        buyButton.setText("Buy");
+        buyButton.setPreferredSize(new java.awt.Dimension(115, 70));
+
+        jButton8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton8.setText("-");
+        jButton8.setPreferredSize(new java.awt.Dimension(68, 34));
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton7.setText("+");
+        jButton7.setPreferredSize(new java.awt.Dimension(68, 34));
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        ticketLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ticketLabel.setText("jLabel5");
+        ticketLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ticketLabel.setPreferredSize(new java.awt.Dimension(50, 50));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ticketLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(79, 79, 79)
+                .addComponent(ticketLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                .addGap(90, 90, 90)
+                .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(9, 9, 9)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(buyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(219, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(buyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        controlPanel.add(jPanel5);
+
+        javax.swing.GroupLayout dashBoardPanelLayout = new javax.swing.GroupLayout(dashBoardPanel);
+        dashBoardPanel.setLayout(dashBoardPanelLayout);
+        dashBoardPanelLayout.setHorizontalGroup(
+            dashBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashBoardPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(dashBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
+        dashBoardPanelLayout.setVerticalGroup(
+            dashBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashBoardPanelLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        cardPanel.add(dashBoardPanel, "dashboardCard");
+
+        reservedTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        reservedTable.setEnabled(false);
+        reservedTable.setShowGrid(true);
+        reservedTable.setShowHorizontalLines(false);
+        reservedTable.setShowVerticalLines(false);
+        reservedTable.setSurrendersFocusOnKeystroke(true);
+        reservedTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(reservedTable);
+        if (reservedTable.getColumnModel().getColumnCount() > 0) {
+            reservedTable.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        paymentTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        paymentTable.setShowGrid(true);
+        paymentTable.getTableHeader().setReorderingAllowed(false);
+        paymentTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                paymentTableMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(paymentTable);
+
+        alreadyPayTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        alreadyPayTable.setEnabled(false);
+        alreadyPayTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(alreadyPayTable);
+
+        payButton.setBackground(new java.awt.Color(0, 204, 0));
+        payButton.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        payButton.setText("Pay");
+
+        javax.swing.GroupLayout paymentPanelLayout = new javax.swing.GroupLayout(paymentPanel);
+        paymentPanel.setLayout(paymentPanelLayout);
+        paymentPanelLayout.setHorizontalGroup(
+            paymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paymentPanelLayout.createSequentialGroup()
+                .addGap(476, 857, Short.MAX_VALUE)
+                .addComponent(payButton, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addComponent(jScrollPane3)
+            .addComponent(jScrollPane4)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+        paymentPanelLayout.setVerticalGroup(
+            paymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paymentPanelLayout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(payButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        cardPanel.add(paymentPanel, "paymentCard");
+
+        cinemaTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        cinemaTable.setEnabled(false);
+        cinemaTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane11.setViewportView(cinemaTable);
+
+        javax.swing.GroupLayout moviePanelLayout = new javax.swing.GroupLayout(moviePanel);
+        moviePanel.setLayout(moviePanelLayout);
+        moviePanelLayout.setHorizontalGroup(
+            moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1022, Short.MAX_VALUE)
+            .addGroup(moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 1022, Short.MAX_VALUE))
+        );
+        moviePanelLayout.setVerticalGroup(
+            moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 760, Short.MAX_VALUE)
+            .addGroup(moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE))
+        );
+
+        cardPanel.add(moviePanel, "movieCard");
+
+        moviepanel.setBackground(new java.awt.Color(204, 204, 204));
+        moviepanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+
+        showmovie.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        showmovie.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"1", "Spider-Man: Across the Spider-Verse", "Action", "2h", "Santa"},
+                {"2", "asd", "qwrt", "12", "zvjg"},
+                {"3", "zxas", "wsafg", "3", "w1tas"},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "MovieID", "Title", "Genre", "Duration", "Director"
+            }
+        ));
+        showmovie.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                showmovieMouseClicked(evt);
+            }
+        });
+        jScrollPane8.setViewportView(showmovie);
+
+        search.setText("search");
+        search.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchMouseClicked(evt);
+            }
+        });
+        search.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchKeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(445, 445, 445)
+                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 1284, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        label.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        label.setText("Movie ID:");
+        jPanel4.add(label);
+
+        MT.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        MT.setText("Movie Title:");
+        jPanel4.add(MT);
+
+        G.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        G.setText("Genre:");
+        jPanel4.add(G);
+
+        D.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        D.setText("Duration:");
+        jPanel4.add(D);
+
+        Di.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        Di.setText("Director:");
+        jPanel4.add(Di);
+
+        jScrollPane9.setViewportView(mid);
+
+        jPanel4.add(jScrollPane9);
+
+        jScrollPane10.setViewportView(mtitle);
+
+        jPanel4.add(jScrollPane10);
+
+        jScrollPane5.setViewportView(mgenre);
+
+        jPanel4.add(jScrollPane5);
+
+        jScrollPane6.setViewportView(mduration);
+
+        jPanel4.add(jScrollPane6);
+
+        jScrollPane7.setViewportView(mdirector);
+
+        jPanel4.add(jScrollPane7);
+
+        TITLE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jPanel4.add(TITLE);
+
+        btnSelect.setText("Select");
+        btnSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnSelect);
+
+        javax.swing.GroupLayout moviepanelLayout = new javax.swing.GroupLayout(moviepanel);
+        moviepanel.setLayout(moviepanelLayout);
+        moviepanelLayout.setHorizontalGroup(
+            moviepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(moviepanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(moviepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        moviepanelLayout.setVerticalGroup(
+            moviepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(moviepanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1023, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(258, 258, 258)
+                    .addComponent(cardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(cardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(0, 0, 0)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        isReservationShowing = false;
+        cardLayout.show(cardPanel, "movieCard");
+        ticketLabel.setText(String.valueOf(maxTickets));
+        switchFromDashboard();
+        if(isCinemaShowing == false)
+        {
+            showCinema();
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void showCinema()
+    {
+        isCinemaShowing = true;
+        arrangeCinemaHeader();
+        String getCinema = "Select C.cinemaName AS 'Cinema Name', C.cinemaAddress AS 'Address' " +
+                          "FROM Cinemas C ";
+        
+        try (Connection con = Connector.getInstance().getConnection(); PreparedStatement prepare = con.prepareStatement(getCinema)){
+            ResultSet rs = prepare.executeQuery();
+            ResultSetMetaData metadata = rs.getMetaData();
+            int numberOfColumns = metadata.getColumnCount();
+            defaultCinemaModel.setColumnCount(0);
+            defaultCinemaModel.setRowCount(0);
+            for (int i = 1; i <= numberOfColumns; i++) {
+                defaultCinemaModel.addColumn(metadata.getColumnName(i));
+
+            }
+            Object[] rowData = new Object[numberOfColumns];
+            while(rs.next()) {
+                for (int i = 1; i <= numberOfColumns; i++) {
+                    rowData[i - 1] = rs.getObject(i);
+//                    results.append(rs.getObject(i)).append("\t");
+                }
+                defaultCinemaModel.addRow(rowData);
+            }
+            rearrangeCinemaTable(numberOfColumns);
+            Connector.getInstance().closeConnection();
+        } catch (Exception e) {
+        }
+    }
+    
+    private void ratingBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ratingBtnActionPerformed
+        // TODO add your handling code here:
+        if(isRatingShowing == false)
+        {
+            RatingPage rp = new RatingPage(this);
+        }
+    }//GEN-LAST:event_ratingBtnActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        new LoginForm();
+        this.dispose();
+        
+    }//GEN-LAST:event_jButton6ActionPerformed
+    
+    private void dashboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardBtnActionPerformed
+        // TODO add your handling code here:
+        isReservationShowing = false;
+        isCinemaShowing = false;
+        
+        maxTickets = 0;
+        buyNotify = 0;
+        ticketLabel.setText(String.valueOf(maxTickets));
+        if (isDashboardShowing == false)
+        {
+            showDashboard();
+            audiPanel.setVisible(true);
+            dashBoardPanel.setVisible(true);
+        }
+        cardLayout.show(cardPanel, "dashboardCard");
+    }//GEN-LAST:event_dashboardBtnActionPerformed
+
+    private void dashboardTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardTableMouseClicked
+        // TODO add your handling code here:
+        if(SwingUtilities.isRightMouseButton(evt))
+        {
+            evt.consume();
+        }
+        else
+        {
+            getAuID_SQL();
+        } 
+    }//GEN-LAST:event_dashboardTableMouseClicked
+     private void getAuID_SQL()
+    {
+        seatID_Q.clear();
+        int row = dashboardTable.getSelectedRow();
+        if (row != -1)
+        {
+            int scheduleId = Integer.parseInt(defaultTableModel.getValueAt(row, 0).toString());    
+            try {
+                Connector con = Connector.getInstance();
+                String getAuID = "SELECT S.scheduleID, S.auditoriumID "
+                        + "From Schedule S "
+                        + "Where S.scheduleID=? ";
+                PreparedStatement prepare = con.getConnection().prepareStatement(getAuID);
+                prepare.setInt(1, scheduleId);
+                ResultSet rs = prepare.executeQuery();
+
+//            if (rs.next())
+//            {
+//                AuID = rs.getInt("auditoriumID");
+//                scheID = rs.getInt("scheduleID");
+//            } 
+                if(seatPanel != null)
+                {
+                    seatPanel.removeAll();
+                    seatPanel.validate();
+                    seatPanel.repaint();
+                }
+                
+                if (rs.next()) {
+                    int auID = rs.getInt("auditoriumID");
+                    int scheID = rs.getInt("scheduleID");
+                    System.out.println(auID);
+                    String getSeatID = "SELECT S.seatID, S.statusSeat, S.rowLocation "
+                            + "From Seats S "
+                            + "Where S.auditoriumID=? ";
+                    try {
+                        prepare = con.getConnection().prepareStatement(getSeatID);
+                        prepare.setInt(1, auID);
+                        rs = prepare.executeQuery();
+                        int i = 0;
+                        double x = 40, y = 60, width = 30, height = 30;
+                        while (rs.next()) {
+                            System.out.println("Status Seat: " + rs.getString("statusSeat"));
+                            int seatID = rs.getInt("seatID");
+                            ticketSelected = 0;
+                            maxTickets = 0;
+                            seatButton[i] = new JRadioButton();
+                            ticketLabel.setText(String.valueOf(maxTickets));
+                            if (rs.getString("statusSeat").equals("Available")) {
+                                seatButton[i].setText(rs.getString("rowLocation"));
+                                seatButton[i].setEnabled(true);
+                                String iconPath;
+                                if (rs.getString("rowLocation").contains("A")) {
+                                    iconPath = "C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\first.png";
+                                } else if (rs.getString("rowLocation").contains("B")) {
+                                    iconPath = "C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\second.png";
+                                } else if (rs.getString("rowLocation").contains("C")) {
+                                    iconPath = "C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\third.png";
+                                } else {
+                                    // Handle other cases or provide a default icon
+                                    iconPath = "C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\default.png";
+                                }
+                                seatButton[i].setIcon(new ImageIcon(iconPath));
+                                seatButton[i].setBounds((int) x, (int) y, (int) width, (int) height);
+                                seatButton[i].setHorizontalTextPosition(JLabel.CENTER);
+                                seatButton[i].setVerticalTextPosition(JLabel.CENTER);
+                            } else if (rs.getString("statusSeat").equals("Unavailable")) {
+                                seatButton[i].setEnabled(false);
+                                seatButton[i].setText(rs.getString("rowLocation"));
+                                seatButton[i].setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\grey.png"));
+                                seatButton[i].setBounds((int) x, (int) y, (int) width, (int) height);
+                                seatButton[i].setHorizontalTextPosition(JLabel.CENTER);
+                                seatButton[i].setVerticalTextPosition(JLabel.CENTER);
+                            }
+                            x = x + width + 14;
+
+                            seatPanel.add(seatButton[i]);
+                            System.out.println(seatButton[i].getText());
+                            i++;
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    screenLabel.setVisible(true);
+                    seatAddListener(auID, scheID);
+                    seatPanel.revalidate();
+                    seatPanel.repaint();
+                }
+                con.closeConnection();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }    
+    private void switchFromDashboard()
+    {
+        isDashboardShowing = false;
+        screenLabel.setVisible(false);
+        if(seatPanel != null)
+        {
+            seatPanel.removeAll();
+            seatPanel.validate();
+            seatPanel.repaint();
+        }
+    }
+    
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        if(maxTickets < 5)
+        {
+            maxTickets++;
+            ticketLabel.setText(Integer.toString(maxTickets));
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        if(maxTickets > 0)
+        {
+            maxTickets--;
+            ticketLabel.setText(Integer.toString(maxTickets));
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        isCinemaShowing = false;
+        switchFromDashboard();
+        if(isReservationShowing == false)
+        {
+            showReservation();
+        }
+        cardLayout.show(cardPanel, "paymentCard");
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void paymentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paymentTableMouseClicked
+        // TODO add your handling code here:
+        if(!paymentID_S.isEmpty())
+        {
+            paymentID_S.clear();
+        }
+
+        getID_Digit();
+        
+    }//GEN-LAST:event_paymentTableMouseClicked
+    private void payButtonActionPerformed(java.awt.event.ActionEvent evt, double totalPay) {                                          
+        // TODO add your handling code here:
+        createPayFrame(totalPay);
+    }               
+    
+    
+    private void createPayFrame(double totalPay)
+    {
+        JFrame paymentFrame = new JFrame();
+        paymentFrame.setSize(500, 200);
+        paymentFrame.setLocationRelativeTo(null);
+        paymentFrame.setVisible(true);
+        paymentFrame.setLayout(null);
+        paymentFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // This code will be executed when the frame is closing
+                System.out.println("Tat may");
+                paymentFrame.dispose();
+            }
+        });
+        
+        JLabel bankNumber = new JLabel("Bank Number: ");
+        bankNumber.setFont(new Font("Sans Serif", Font.BOLD, 28));
+        bankNumber.setBounds(10, 10, 200, 50);
+        
+        JLabel securityCode = new JLabel("Security code: ");
+        securityCode.setFont(new Font("Sans Serif", Font.BOLD, 28));
+        securityCode.setBounds(10, 60, 200, 50);
+        
+        JTextField bankNumField = new JTextField();
+        bankNumField.setBounds(220, 10, 200, 50);
+        bankNumField.setFont(new Font("Sans Serif", Font.BOLD, 28));
+        
+        JPasswordField securityTxtField = new JPasswordField();
+        securityTxtField.setBounds(220, 60, 200, 50);
+        securityTxtField.setFont(new Font("Sans Serif", Font.BOLD, 28));
+        
+        JButton confirmButton = new JButton("Confirm");
+        confirmButton.setFont(new Font("Sans Serif", Font.BOLD, 18));
+        confirmButton.setBounds(320, 110, 100, 50);
+        
+        confirmButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertToPayment(evt, bankNumField.getText(), securityTxtField.getText(), totalPay, paymentFrame);
+            }
+        });
+        
+        paymentFrame.add(bankNumber);
+        paymentFrame.add(securityCode);
+        paymentFrame.add(bankNumField);
+        paymentFrame.add(securityTxtField);
+        paymentFrame.add(confirmButton);
+        
+    }
+    
+    private void getID_Digit()
+    {
+        int row = paymentTable.getSelectedRow();
+        if(row != -1)
+        {
+            int ID = Integer.parseInt(defaultPaymentModel.getValueAt(row, 0).toString());
+            int scheduleID = Integer.parseInt(defaultPaymentModel.getValueAt(row, 1).toString());
+            double totalPay = Double.parseDouble(defaultPaymentModel.getValueAt(row, 2).toString());
+            String getPaymentID = "SELECT paymentID " +
+                      "FROM Payment " +
+                      "WHERE CHARINDEX(CAST(paymentID AS NVARCHAR(20)), ?) > 0;";
+
+            try {
+                Connection con = Connector.getInstance().getConnection();
+                PreparedStatement prepare = con.prepareStatement(getPaymentID);
+                prepare.setString(1, String.valueOf(ID));
+                ResultSet rs = prepare.executeQuery();
+                while(rs.next())
+                {
+                    paymentID_S.push(rs.getInt("paymentID"));
+                }
+                Connector.getInstance().closeConnection();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            
+            System.out.println(paymentID_S);
+            
+            payButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payButtonActionPerformed(evt, totalPay);
+            }
+        });
+        }
+    }
+    private void insertToPayment(java.awt.event.ActionEvent evt, String bankNumber, String securityCode, double totalPay, JFrame paymentFrame)
+    {
+        String checkBank = "SELECT * FROM BankAccount Where userName=? AND bankNumber=? AND bankOTP=? ";
+        String updatePayment = "UPDATE Payment " +
+                           "SET paymentStatus = 'Payed' " +
+                           "WHERE paymentID = ?";
+        String updateBank = "UPDATE BankAccount SET bankMoney=bankMoney-? Where userName=? AND bankNumber=? "; 
+
+    try (Connection con = Connector.getInstance().getConnection();
+         PreparedStatement prepare = con.prepareStatement(checkBank)) {
+        prepare.setString(1, loginUsername);
+        prepare.setInt(2, Integer.parseInt(bankNumber));
+        prepare.setInt(3, Integer.parseInt(securityCode));
+        ResultSet rs = prepare.executeQuery();
+        boolean hasNext = rs.next();
+        boolean paySuccess = false;
+        if(hasNext)
+        {
+            JOptionPane.showMessageDialog(paymentFrame, "Payment Success!");
+            PreparedStatement prp = con.prepareStatement(updatePayment);
+     
+            while (!paymentID_S.isEmpty()) {
+                prp.setInt(1, paymentID_S.pop());
+                prp.executeUpdate();
+            }
+            paymentFrame.dispose();
+            paySuccess = true;
+        }
+        else if(hasNext && rs.getInt("bankMoney") < totalPay)
+        {
+            JOptionPane.showMessageDialog(this, "Your balance is not enough!");
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Wrong Bank Number or security Code!");
+        }
+        
+        if(paySuccess == true)
+        {
+            Connection conn = Connector.getInstance().getConnection();
+            PreparedStatement ppr = conn.prepareStatement(updateBank);
+            ppr.setDouble(1, totalPay);
+            ppr.setString(2, loginUsername);
+            ppr.setInt(3, Integer.parseInt(bankNumber));
+            ppr.executeUpdate(); 
+        }
+        Connector.getInstance().closeConnection();
+    } catch (SQLException e) {
+        // Handle SQLException appropriately (e.g., log or show an error message)
+        System.out.println("Error updating payment status: " + e.getMessage());
+    } catch (Exception e) {
+        // Handle other exceptions if needed
+        System.out.println("Unexpected error: " + e.getMessage());
+    }
+    }
+    private void showReservation() {
+        isReservationShowing = true;
+        
+        arrangeReserveHeader();
+        arrangePaymentHeader();
+        arrangeAlreadyPaymentHeader();
+    
+        try {
+            Connection con = Connector.getInstance().getConnection();
+
+            String getReservation = "WITH RankedSeats AS ( " +
+                                    "SELECT " +
+                                        "C.cinemaName, " +
+                                        "A.auditoriumName, " +
+                                        "M.movieName, " +
+                                        "S.scheduleID, " +
+                                        "Se.rowLocation, " +
+                                        "FORMAT(R.reserveDate, 'yyyy-MM-dd HH:mm') AS formattedReserveDate, " +
+                                        "ROW_NUMBER() OVER (PARTITION BY S.scheduleID, FORMAT(R.reserveDate, 'yyyy-MM-dd HH:mm') ORDER BY R.reserveDate) AS RowNum " +
+                                    "FROM " +
+                                        "Reservation R " +
+                                        "JOIN Schedule S ON R.scheduleID = S.scheduleID " +
+                                        "JOIN Auditorium A ON A.auditoriumID = S.auditoriumID " +
+                                        "JOIN Movies M ON M.movieID = S.movieID " +
+                                        "JOIN Cinemas C ON C.cinemaID = A.cinemaID " +
+                                        "JOIN Tickets T ON T.reserveID = R.reserveID " +
+                                        "JOIN Seats Se ON T.seatID = Se.seatID " +
+                                    "WHERE " +
+                                        "userName = ? " +
+                                ") " +
+                                "SELECT " +
+                                    "cinemaName, " +
+                                    "auditoriumName, " +
+                                    "movieName, " +
+                                    "STUFF(( " +
+                                        "SELECT ', ' + rowLocation " +
+                                        "FROM RankedSeats RS " +
+                                        "WHERE RS.scheduleID = R.scheduleID " +
+                                        "AND RS.formattedReserveDate = R.formattedReserveDate " +
+                                        "FOR XML PATH(''), TYPE " +
+                                    ").value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS rowLocations, " +
+                                    "MAX(formattedReserveDate) AS reserveDate " +
+                                "FROM " +
+                                    "RankedSeats R " +
+                                "GROUP BY " +
+                                    "cinemaName, " +
+                                    "auditoriumName, " +
+                                    "movieName, " +
+                                    "R.scheduleID, " +
+                                    "R.formattedReserveDate;";
+
+
+            PreparedStatement prepareReservation = con.prepareStatement(getReservation);
+            prepareReservation.setString(1, loginUsername);
+            ResultSet rsReservation = prepareReservation.executeQuery();
+
+
+            ResultSetMetaData metaDataReservation = rsReservation.getMetaData();
+            int numberOfColumnsReservation = metaDataReservation.getColumnCount();
+
+            defaultReservedModel.setColumnCount(0);
+            defaultReservedModel.setRowCount(0);
+
+            for (int i = 1; i <= numberOfColumnsReservation; i++) {
+                defaultReservedModel.addColumn(metaDataReservation.getColumnName(i));
+            }
+
+            Object[] rowDataReservation = new Object[numberOfColumnsReservation + 1];
+
+            while (rsReservation.next()) {
+                for (int i = 1; i <= numberOfColumnsReservation; i++) {
+                    rowDataReservation[i-1] = rsReservation.getObject(i);
+                }
+                defaultReservedModel.addRow(rowDataReservation);
+            }
+
+            String getPayment = "WITH RankedPayments AS ( " +
+                                "SELECT " +
+                                "CAST(P2.paymentID AS NVARCHAR(10)) + '' AS ID, " +
+                                "P2.userName, " +
+                                "P2.paymentStatus, " +
+                                "R.scheduleID, " +
+                                "FORMAT(SUM(P2.amount), 'N2') AS 'Total Pay', " +
+                                "FORMAT(MAX(P2.paymentDate), 'yyyy-MM-dd HH:mm') AS Date " +
+                                "FROM " +
+                                "Payment P2 " +
+                                "JOIN Reservation R ON P2.reserveID = R.reserveID " +
+                                "WHERE " +
+                                "P2.userName = ? " +
+                                "AND P2.paymentStatus = 'Unpayed' " +
+                                "GROUP BY " +
+                                "P2.paymentID, " +
+                                "P2.userName, " +
+                                "P2.paymentStatus, " +
+                                "R.scheduleID " +
+                                ") " +
+                                "SELECT " +
+                                "REPLACE( " +
+                                "STUFF( " +
+                                "( " +
+                                "SELECT ID " +
+                                "FROM RankedPayments RP " +
+                                "WHERE RP.scheduleID = RP1.scheduleID " +
+                                "AND RP.Date = RP1.Date " +
+                                "FOR XML PATH(''), TYPE " +
+                                ").value('.', 'NVARCHAR(MAX)'), 1, 0, '' " +
+                                "), ', ', '' " +
+                                ") AS ID, " +
+                                "RP1.scheduleID, " +
+                                "FORMAT(SUM(CAST(RP1.[Total Pay] AS DECIMAL(18, 2))), 'N2') AS 'Total Pay', " +
+                                "MAX(RP1.Date) AS Date, " +
+                                "'Unpayed' AS Status " +
+                                "FROM " +
+                                "RankedPayments RP1 " +
+                                "GROUP BY " +
+                                "RP1.scheduleID, RP1.Date;";
+
+            PreparedStatement preparePayment = con.prepareStatement(getPayment);
+            preparePayment.setString(1, loginUsername);
+            ResultSet rsPayment = preparePayment.executeQuery();
+
+
+            ResultSetMetaData metaDataPayment = rsPayment.getMetaData();
+            int numberOfColumnsPayment = metaDataPayment.getColumnCount();
+
+            rearrangeReservation(numberOfColumnsReservation);
+
+            defaultPaymentModel.setColumnCount(0);
+            defaultPaymentModel.setRowCount(0);
+
+            for (int i = 1; i <= numberOfColumnsPayment; i++) {
+                defaultPaymentModel.addColumn(metaDataPayment.getColumnName(i));
+            }
+
+            Object[] rowDataPayment = new Object[numberOfColumnsPayment];
+
+            while (rsPayment.next()) 
+            {
+                boolean hasNullColumn = false; 
+
+                for (int i = 1; i <= numberOfColumnsPayment; i++) 
+                {
+                    rowDataPayment[i - 1] = rsPayment.getObject(i);
+                    if (rsPayment.wasNull()) 
+                    {
+                        hasNullColumn = true;
+                        break;
+                    }
+                }
+
+                if (!hasNullColumn) 
+                {
+                    defaultPaymentModel.addRow(rowDataPayment);
+                }
+            }
+            TableColumnModel tcm = paymentTable.getColumnModel();
+
+
+            rearrangePayment(numberOfColumnsPayment);
+            tcm.removeColumn(tcm.getColumn(1));
+            String getAlreadyPay = "WITH RankedPayments AS ( " +
+                        "SELECT " +
+                            "CAST(P2.paymentID AS NVARCHAR(10)) + '' AS CombinedID, " +
+                            "P2.userName, " +
+                            "P2.paymentStatus, " +
+                            "R.scheduleID, " +
+                            "FORMAT(SUM(P2.amount), 'N2') AS TotalPay, " +
+                            "FORMAT(MAX(P2.paymentDate), 'yyyy-MM-dd HH:mm') AS LatestDate " +
+                        "FROM " +
+                            "Payment P2 " +
+                            "JOIN Reservation R ON P2.reserveID = R.reserveID " +
+                        "WHERE " +
+                            "P2.userName = ? AND P2.paymentStatus = 'Payed' " +
+                        "GROUP BY " +
+                            "P2.paymentID, " +
+                            "P2.userName, " +
+                            "P2.paymentStatus, " +
+                            "R.scheduleID " +
+                    ") " +
+                    "SELECT " +
+                        "STUFF( " +
+                            "( " +
+                                "SELECT CombinedID " +
+                                "FROM RankedPayments RP " +
+                                "WHERE RP.scheduleID = RP1.scheduleID " +
+                                  "AND RP.LatestDate = RP1.LatestDate " +
+                                "FOR XML PATH(''), TYPE " +
+                            ").value('.', 'NVARCHAR(MAX)'), 1, 0, '' " +
+                        ") AS 'ID', " +
+                        "RP1.scheduleID, " +
+                        "FORMAT(SUM(CAST(RP1.TotalPay AS DECIMAL(18, 2))), 'N2') AS 'Total Pay', " +
+                        "MAX(RP1.LatestDate) AS 'Date', " +
+                        "'Payed' AS Status " +
+                    "FROM " +
+                        "RankedPayments RP1 " +
+                    "GROUP BY " +
+                        "RP1.scheduleID, RP1.LatestDate;";
+
+
+            PreparedStatement prepareAlreadyPayment = con.prepareStatement(getAlreadyPay);
+            prepareAlreadyPayment.setString(1, loginUsername);
+            ResultSet rsAlreadyPayment = prepareAlreadyPayment.executeQuery();
+            ResultSetMetaData metaDataAlreadyPayment = rsAlreadyPayment.getMetaData();
+            int numberOfColumnsAlreadyPayment = metaDataAlreadyPayment.getColumnCount();
+            defaultAlreadyPayModel.setColumnCount(0);
+            defaultAlreadyPayModel.setRowCount(0);
+            for (int i = 1; i <= numberOfColumnsAlreadyPayment; i++) {
+                defaultAlreadyPayModel.addColumn(metaDataAlreadyPayment.getColumnName(i));
+            }
+
+            Object[] rowDataAlreadyPayment = new Object[numberOfColumnsAlreadyPayment];
+
+            while (rsAlreadyPayment.next()) 
+            {
+                boolean hasNullColumn = false; 
+
+                for (int i = 1; i <= numberOfColumnsAlreadyPayment; i++) 
+                {
+                    rowDataAlreadyPayment[i - 1] = rsAlreadyPayment.getObject(i);
+                    if (rsAlreadyPayment.wasNull()) 
+                    {
+                        hasNullColumn = true;
+                        break;
+                    }
+                }
+
+                if (!hasNullColumn) 
+                {
+                    defaultAlreadyPayModel.addRow(rowDataAlreadyPayment);
+                }
+            }
+            TableColumnModel tcm1 = alreadyPayTable.getColumnModel();
+            
+            rearrangeAlreadyPayment(numberOfColumnsAlreadyPayment);
+            tcm1.removeColumn(tcm1.getColumn(1));
+            Connector.getInstance().closeConnection();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    
+    private void showDashboard() // Show the schedule in dashboard
+    {
+        arrangeScheduleHeader();
+        isDashboardShowing = true;
+        try (Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
+            String SQL = "SELECT DISTINCT S.scheduleID AS 'Order', M.movieName AS 'Movie', C.cinemaName AS 'Cinema', " +
+             "M.genre AS 'Genre', M.duration AS 'Duration', M.directorName AS 'Director', " +
+             "FORMAT(S.scheduleDate, 'yyyy-MM-dd HH:mm') AS 'Date', " +
+             "(S.totalTicket - S.ticketsSold) AS 'Ticket', " +
+             "FORMAT(S.ticketPrice, 'N2') AS Price " +
+             "FROM Movies M " +
+             "JOIN Schedule S ON S.movieID = M.movieID " +
+             "JOIN Auditorium A ON A.auditoriumID = S.auditoriumID " +
+             "JOIN Cinemas C ON C.cinemaID = A.cinemaID";
+            ResultSet rs = stmt.executeQuery(SQL);
+            StringBuilder results = new StringBuilder();
+            ResultSetMetaData metaData = rs.getMetaData();
+            int numberOfColumns = metaData.getColumnCount();
+
+            defaultTableModel.setRowCount(0);    // Clears rows
+            defaultTableModel.setColumnCount(0); // Clears columns
+            for (int i = 1; i <= numberOfColumns; i++) {
+                defaultTableModel.addColumn(metaData.getColumnName(i));
+//                results.append(metaData.getColumnName(i)).append("\t");
+            }
+            results.append("\n");
+            Object[] rowData = new Object[numberOfColumns];
+            while(rs.next()) {
+                for (int i = 1; i <= numberOfColumns; i++) {
+                    rowData[i - 1] = rs.getObject(i);
+//                    results.append(rs.getObject(i)).append("\t");
+                }
+                defaultTableModel.addRow(rowData);
+//                results.append("\n");
+            }
+            rearrangeTable1(numberOfColumns);
+            Connector.getInstance().closeConnection();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } 
+    }
+    
+    private void showmovieMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showmovieMouseClicked
+        // TODO add your handling code here:
+        int row = showmovie.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel)showmovie.getModel();
+
+        mid.setText(model.getValueAt(row, 0).toString());
+        mtitle.setText(model.getValueAt(row, 1).toString());
+        mgenre.setText(model.getValueAt(row, 2).toString());
+        mduration.setText(model.getValueAt(row, 3).toString());
+        mdirector.setText(model.getValueAt(row, 4).toString());
+    }//GEN-LAST:event_showmovieMouseClicked
+
+    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
+        // TODO add your handling code here:
+        search.setText("");
+    }//GEN-LAST:event_searchMouseClicked
+
+    private void searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchKeyReleased
+        // TODO add your handling code here:
+        DefaultTableModel obj = (DefaultTableModel)showmovie.getModel();
+        TableRowSorter<DefaultTableModel> objl = new TableRowSorter<>(obj);
+        showmovie.setRowSorter(objl);
+        objl.setRowFilter(RowFilter.regexFilter(search.getText()));
+
+    }//GEN-LAST:event_searchKeyReleased
+
+    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
+        // TODO add your handling code here:
+        TITLE.setText(mtitle.getText());
+    }//GEN-LAST:event_btnSelectActionPerformed
+
+    private void setPanelFirst() {
+        screenLabel.setVisible(false);
+        seatControlPanel.setVisible(true);
+        audiPanel.setVisible(true);
+        dashBoardPanel.setVisible(true);
+        moviepanel.setVisible(false);
+    }
     /**
      * @param args the command line arguments
      */
@@ -72,11 +1483,353 @@ public class MainPage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainPage().setVisible(true);
+                MainPage mainp = new MainPage("giakhuong");
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel D;
+    private javax.swing.JLabel Di;
+    private javax.swing.JLabel G;
+    private javax.swing.JLabel MT;
+    private javax.swing.JLabel TITLE;
+    private javax.swing.JTable alreadyPayTable;
+    private javax.swing.JPanel audiPanel;
+    private javax.swing.JButton btnSelect;
+    private javax.swing.JButton buyButton;
+    private javax.swing.JPanel cardPanel;
+    private javax.swing.JTable cinemaTable;
+    private javax.swing.JPanel controlPanel;
+    private javax.swing.JPanel dashBoardPanel;
+    private javax.swing.JButton dashboardBtn;
+    private javax.swing.JTable dashboardTable;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JLabel label;
+    private javax.swing.JTextPane mdirector;
+    private javax.swing.JTextPane mduration;
+    private javax.swing.JTextPane mgenre;
+    private javax.swing.JTextPane mid;
+    private javax.swing.JPanel moviePanel;
+    private javax.swing.JPanel moviepanel;
+    private javax.swing.JTextPane mtitle;
+    private javax.swing.JButton payButton;
+    private javax.swing.JPanel paymentPanel;
+    private javax.swing.JTable paymentTable;
+    private javax.swing.JButton ratingBtn;
+    private javax.swing.JTable reservedTable;
+    private javax.swing.JLabel screenLabel;
+    private javax.swing.JTextField search;
+    private javax.swing.JPanel seatControlPanel;
+    private javax.swing.JPanel seatPanel;
+    private javax.swing.JTable showmovie;
+    private javax.swing.JLabel ticketLabel;
     // End of variables declaration//GEN-END:variables
+    // Align center the contents in Dashboard
+    private void rearrangeCinemaTable(int numberOfColumns) {
+        cinemaTable.getColumnModel().getColumn(0).setMaxWidth(500);  
+        cinemaTable.getColumnModel().getColumn(1).setMaxWidth(800);  
+         
+        
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for (int i = 0; i < numberOfColumns; i++)
+        {
+            cinemaTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            cinemaTable.getColumnModel().getColumn(i).setResizable(false);
+        }
+    }
+    // Align center the columns's name in Dashboard
+    private void arrangeCinemaHeader() {
+        JTableHeader header = cinemaTable.getTableHeader();
+
+        // Get the default renderer for the header
+        DefaultTableCellRenderer defaultRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
+
+        // Set the horizontal alignment of the renderer to center
+        defaultRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+    }   
+    
+    // Align center the contents in Dashboard
+    private void rearrangeTable1(int numberOfColumns) {
+        dashboardTable.getColumnModel().getColumn(0).setMaxWidth(50);  
+        dashboardTable.getColumnModel().getColumn(4).setMaxWidth(80);  
+        dashboardTable.getColumnModel().getColumn(7).setMaxWidth(60);  
+        dashboardTable.getColumnModel().getColumn(8).setMaxWidth(60);  
+        
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for (int i = 0; i < numberOfColumns; i++)
+        {
+            dashboardTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            dashboardTable.getColumnModel().getColumn(i).setResizable(false);
+        }
+    }
+    // Align center the columns's name in Dashboard
+    private void arrangeScheduleHeader() {
+        JTableHeader header = dashboardTable.getTableHeader();
+
+        // Get the default renderer for the header
+        DefaultTableCellRenderer defaultRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
+
+        // Set the horizontal alignment of the renderer to center
+        defaultRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+    }   
+    // Align center the contents in Reservation table
+    private void rearrangeReservation(int numberOfColumns) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for (int i = 0; i < numberOfColumns; i++)
+        {
+            reservedTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            reservedTable.getColumnModel().getColumn(i).setResizable(false);
+        }
+    }
+    // Align center the column's name in Reservation
+    private void arrangeReserveHeader() {
+        JTableHeader header = reservedTable.getTableHeader();
+
+        // Get the default renderer for the header
+        DefaultTableCellRenderer defaultRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
+
+        // Set the horizontal alignment of the renderer to center
+        defaultRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+    }   
+    // Align center the contents in Payment table
+    private void rearrangePayment(int numberOfColumns) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for (int i = 0; i < numberOfColumns; i++)
+        {
+            paymentTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            paymentTable.getColumnModel().getColumn(i).setResizable(false);
+        }
+    }
+    // Align center the column's name in Payment table
+    private void arrangePaymentHeader() {
+        JTableHeader header = paymentTable.getTableHeader();
+
+        // Get the default renderer for the header
+        DefaultTableCellRenderer defaultRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
+
+        // Set the horizontal alignment of the renderer to center
+        defaultRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+    }   
+    // Align center the contents in already Payment table
+    private void rearrangeAlreadyPayment(int numberOfColumns) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for (int i = 0; i < numberOfColumns; i++)
+        {
+            alreadyPayTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            alreadyPayTable.getColumnModel().getColumn(i).setResizable(false);
+        }
+    }
+    // Align center the column's name in Reservation
+    private void arrangeAlreadyPaymentHeader() {
+        JTableHeader header = alreadyPayTable.getTableHeader();
+
+        // Get the default renderer for the header
+        DefaultTableCellRenderer defaultRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
+
+        // Set the horizontal alignment of the renderer to center
+        defaultRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+    }   
+    private void seatAddListener(int auID, int scheID) {
+    for (JRadioButton seat : seatButton) {
+        seat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seatActionPerformed(evt, seat, auID, scheID);
+            }
+        });
+    }
 }
+
+    private void seatActionPerformed(java.awt.event.ActionEvent evt, JRadioButton seat, int auID, int scheID) {
+        if (seat.isSelected()) 
+        {
+            if (ticketSelected < maxTickets) 
+            {
+                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\grey.png"));
+                ticketSelected++;
+                rowLocation_Q.add(seat.getText());
+                takeOrder(seat.isSelected(), auID, scheID);
+            } 
+            else 
+            {
+                seat.setSelected(false); // Deselect the seat if max tickets reached
+            }
+        } 
+        else 
+        {
+            if (seat.getText().contains("A")) 
+            {
+                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\first.png"));
+            } 
+            else if (seat.getText().contains("B")) 
+            {
+                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\second.png"));
+            } 
+            else if (seat.getText().contains("C")) 
+            {
+                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\third.png"));
+            }
+            rowLocation_Q.add(seat.getText());
+
+            takeOrder(seat.isSelected(), auID, scheID);
+            ticketSelected--;
+        }
+    }
+    private void takeOrder(boolean isSelected, int auID, int scheID)
+    {
+        String getSeatID_SQL = "SELECT S.seatID " +
+                               "FROM Seats S " +
+                               "Where S.rowLocation=? AND S.auditoriumID=? ";
+        try {
+            Connector conn = Connector.getInstance();
+            PreparedStatement prepare = conn.getConnection().prepareStatement(getSeatID_SQL);
+            prepare.setString(1, rowLocation_Q.poll());
+            prepare.setInt(2, auID);
+            
+            ResultSet rs = prepare.executeQuery();
+            
+            boolean hasNext = rs.next();
+            
+            if(hasNext && isSelected == true)
+            {
+                int seatID = rs.getInt("seatID");
+                System.out.println(seatID);
+                addSelectSeat(auID, scheID, seatID);
+            }     
+            else if (hasNext && isSelected == false)
+            {
+                int seatID = rs.getInt("seatID");
+                System.out.println(seatID);
+                removeDeselectSeat(seatID);
+            }
+            conn.closeConnection();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    
+    private void removeDeselectSeat(int seatID)
+    {
+        if(!seatID_Q.isEmpty())
+        {
+            seatID_Q.remove(seatID);
+
+        }
+        System.out.println(seatID_Q);
+    }   
+    
+    private void addSelectSeat(int auID, int scheID, int seatID)
+    {
+        buyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyButtonPerformed(evt, auID, scheID);
+            }
+        });
+        seatID_Q.add(seatID);
+    } 
+    
+    private void buyButtonPerformed(java.awt.event.ActionEvent evt, int auID, int scheID) {
+    String insertSeat = "INSERT INTO Reservation(userName, scheduleID, reserveDate) " + 
+                        "VALUES (?, ?, ?)";
+    String setUnavailable = "UPDATE Seats " +
+                            "SET statusSeat = 'Unavailable' " +
+                            "WHERE seatID=?";
+    String insertPayment = "INSERT INTO Payment(userName, reserveID, amount, paymentDate, paymentStatus) " +
+                           "VALUES (?, ?, ?, ?, ?)";
+    String insertTicket = "INSERT INTO Tickets(reserveID, seatID) VALUES (?, ?)";
+    
+    try {
+        Connector con = Connector.getInstance();
+        PreparedStatement prepare = null;
+        int reserveID = -1;
+        
+        // Reservation
+        prepare = con.getConnection().prepareStatement(insertSeat, Statement.RETURN_GENERATED_KEYS);
+        int seatID = seatID_Q.poll();
+        Date currentDate = getCurrentDate();
+        java.sql.Timestamp timestamp = new java.sql.Timestamp(currentDate.getTime());
+        prepare.setString(1, loginUsername);
+        prepare.setInt(2, scheID);
+        prepare.setTimestamp(3, timestamp);
+        prepare.executeUpdate();
+
+        ResultSet generatedKeys = prepare.getGeneratedKeys();
+        
+        if(generatedKeys.next())
+        {
+            reserveID = generatedKeys.getInt(1);
+        }
+
+        // Status Seat
+        prepare = con.getConnection().prepareStatement(setUnavailable);
+        prepare.setInt(1, seatID);
+        prepare.executeUpdate();
+
+        // Payment
+        prepare = con.getConnection().prepareStatement(insertPayment);
+        prepare.setString(1, loginUsername);
+        prepare.setInt(2, reserveID);
+        prepare.setInt(3, 8);
+        prepare.setTimestamp(4, timestamp);
+        prepare.setString(5, "Unpayed");
+        prepare.executeUpdate();
+
+        // Tickets
+        prepare = con.getConnection().prepareStatement(insertTicket);
+        prepare.setInt(1, reserveID);
+        prepare.setInt(2, seatID);
+        prepare.executeUpdate();  
+        con.closeConnection();
+    } catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+    buyNotify++;
+    if(buyNotify == maxTickets)
+    {
+        JOptionPane.showMessageDialog(dashBoardPanel, "You successfully created your reservation!");
+        switchFromDashboard();
+        maxTickets = 0;
+        ticketLabel.setText(String.valueOf(maxTickets));
+        buyNotify = 0;
+    }   
+}
+
+    private static Date getCurrentDate() {
+        // Getting the current date
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date currentDate = calendar.getTime();
+
+        // Converting Java Date to SQL Date
+        return new Date(currentDate.getTime());
+    }
+}
+
