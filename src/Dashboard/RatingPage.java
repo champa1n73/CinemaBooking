@@ -5,6 +5,8 @@
 package Dashboard;
 
 import Connector.Connector;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,7 +26,7 @@ public class RatingPage extends javax.swing.JFrame {
     /**
      * Creates new form RatingPage
      */
-    public RatingPage() {
+    public RatingPage(MainPage mp) {
         initComponents();
                 defaultTableModel = new DefaultTableModel(){
             @Override
@@ -32,10 +34,21 @@ public class RatingPage extends javax.swing.JFrame {
                 return false;
             }
         };
+        mp.setIsRatingShowing(true);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // This code will be executed when the frame is closing
+                System.out.println("Tat may");
+                mp.setIsRatingShowing(false);
+                dispose();
+            }
+        });
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable1.setModel(defaultTableModel);
         getCinemaRates();
         getCinemaNames();
+        setVisible(true);
         formPn.setVisible(false);
     }
 
@@ -357,7 +370,7 @@ public class RatingPage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RatingPage().setVisible(true);
+                
             }
         });
     }
