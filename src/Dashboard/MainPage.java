@@ -753,9 +753,9 @@ public class MainPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
-        isReservationShowing = false;
         cardLayout.show(cardPanel, "movieCard");
+        isReservationShowing = false;
+        
         ticketLabel.setText(String.valueOf(maxTickets));
         switchFromDashboard();
         if(isCinemaShowing == false)
@@ -813,6 +813,7 @@ public class MainPage extends javax.swing.JFrame {
     
     private void dashboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardBtnActionPerformed
         // TODO add your handling code here:
+        cardLayout.show(cardPanel, "dashboardCard");
         isReservationShowing = false;
         isCinemaShowing = false;
         
@@ -825,7 +826,7 @@ public class MainPage extends javax.swing.JFrame {
             audiPanel.setVisible(true);
             dashBoardPanel.setVisible(true);
         }
-        cardLayout.show(cardPanel, "dashboardCard");
+        
     }//GEN-LAST:event_dashboardBtnActionPerformed
 
     private void dashboardTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardTableMouseClicked
@@ -965,13 +966,14 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
+        cardLayout.show(cardPanel, "paymentCard");
         isCinemaShowing = false;
         switchFromDashboard();
         if(isReservationShowing == false)
         {
             showReservation();
         }
-        cardLayout.show(cardPanel, "paymentCard");
+        
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void paymentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paymentTableMouseClicked
