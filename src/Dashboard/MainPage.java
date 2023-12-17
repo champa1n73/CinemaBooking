@@ -800,7 +800,7 @@ public class MainPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(isRatingShowing == false)
         {
-            RatingPage rp = new RatingPage(this);
+            RatingPage rp = new RatingPage(this, loginUsername);
         }
     }//GEN-LAST:event_ratingBtnActionPerformed
 

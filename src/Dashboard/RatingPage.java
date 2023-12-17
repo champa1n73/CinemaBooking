@@ -21,12 +21,14 @@ import javax.swing.table.DefaultTableModel;
  * @author macbook
  */
 public class RatingPage extends javax.swing.JFrame {
+    private String loginUsername;
     DefaultTableModel defaultTableModel;
 
     /**
      * Creates new form RatingPage
      */
-    public RatingPage(MainPage mp) {
+    public RatingPage(MainPage mp, String loginUsername) {
+        this.loginUsername = loginUsername;
         initComponents();
                 defaultTableModel = new DefaultTableModel(){
             @Override
@@ -62,7 +64,6 @@ public class RatingPage extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        backBtn = new javax.swing.JButton();
         cinemaNames = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         formPn = new javax.swing.JPanel();
@@ -79,13 +80,6 @@ public class RatingPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        backBtn.setText("Back");
-        backBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backBtnActionPerformed(evt);
-            }
-        });
 
         cinemaNames.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cinema name" }));
         cinemaNames.setToolTipText("Movie names");
@@ -195,9 +189,7 @@ public class RatingPage extends javax.swing.JFrame {
                     .addComponent(formPn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cinemaNames, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(backBtn))
+                        .addComponent(cinemaNames, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2))
                 .addContainerGap())
@@ -205,9 +197,7 @@ public class RatingPage extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(backBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(35, 35, 35)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
                 .addComponent(cinemaNames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -239,11 +229,6 @@ public class RatingPage extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_backBtnActionPerformed
-
     private void cinemaNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cinemaNamesActionPerformed
         // TODO add your handling code here:
         String selectedValue = cinemaNames.getSelectedItem().toString();
@@ -261,15 +246,34 @@ public class RatingPage extends javax.swing.JFrame {
 
     private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
         // TODO add your handling code here:
+        String connectionUrl = "jdbc:sqlserver://sql.bsite.net\\MSSQL2016;encrypt=false;databaseName=giakhuong0703_Cinema;user=giakhuong0703_Cinema;password=khuong@07032003";
         String rating = cinemaCbox.getSelectedItem().toString();
         String cinemaName = cnNameLb.getText();
         String comment = cinemaCm.getText();
-        try (Connection conn = Connector.getInstance().getConnection(); Statement stmt = conn.createStatement()) {
-            String SQL = "INSERT INTO Review VALUES" +
-                    "(" + cinemaName + ", " + comment + ", " + rating + ")";
-            System.out.println(SQL);
-            ResultSet rs = stmt.executeQuery(SQL);
-            System.out.println("Insert user comment succeed!");
+        try (Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement()) {
+            System.out.println(cinemaName);
+            // Query to retrieve cinemaID
+            String SQL1 = "SELECT c.cinemaID FROM Cinemas c WHERE c.cinemaName = '" + cinemaName + "';";
+            ResultSet rs1 = stmt.executeQuery(SQL1);
+            // Move to the first row
+            if (rs1.next()) {
+                // Retrieve the cinemaID from the result set
+                int cinemaID = rs1.getInt(1);
+                System.out.println("Cinema ID: " + cinemaID);
+                // Query to insert review
+                String SQL2 = "INSERT INTO Review (username, comment, ratePoint, cinemaID) VALUES " +
+                              "('" + loginUsername + "', '" + comment + "', '" + rating + "', " + cinemaID + ")";
+                System.out.println(SQL2);
+                // Execute the INSERT statement
+                int rowsAffected = stmt.executeUpdate(SQL2);
+                if (rowsAffected > 0) {
+                    System.out.println("Insert user comment succeed!");
+                } else {
+                    System.out.println("Insert user comment failed.");
+                }
+            } else {
+                System.out.println("Cinema not found: " + cinemaName);
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -315,7 +319,6 @@ public class RatingPage extends javax.swing.JFrame {
                 }
                 defaultTableModel.insertRow(0, rowData);
             }
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -335,7 +338,6 @@ public class RatingPage extends javax.swing.JFrame {
                     cinemaNames.addItem(rs.getObject(i).toString());
                 }
             }
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } 
@@ -377,7 +379,6 @@ public class RatingPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Submit;
-    private javax.swing.JButton backBtn;
     private javax.swing.JComboBox<String> cinemaCbox;
     private javax.swing.JTextArea cinemaCm;
     private javax.swing.JComboBox<String> cinemaNames;
