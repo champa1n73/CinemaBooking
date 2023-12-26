@@ -50,11 +50,17 @@ import javax.swing.table.TableRowSorter;
  * @author ADMIN
  */
 public class MainPage extends javax.swing.JFrame {
+    //Table models
     DefaultTableModel defaultTableModel, defaultReservedModel, defaultPaymentModel, defaultAlreadyPayModel, defaultCinemaModel;
+    
     private String loginUsername;
     private JRadioButton[] seatButton = new JRadioButton[30];
+    
+    // Ticket variables
     private int ticketSelected, maxTickets, buyNotify;
-    private boolean isDashboardShowing, isReservationShowing, isCinemaShowing, isRatingShowing = false;
+    
+    // Checking variables
+    private boolean isDashboardShowing, isReservationShowing, isCinemaShowing, isRatingShowing = false, isPaying = false;;
 
     public boolean isIsRatingShowing() {
         return isRatingShowing;
@@ -893,14 +899,14 @@ public class MainPage extends javax.swing.JFrame {
                                 seatButton[i].setEnabled(true);
                                 String iconPath;
                                 if (rs.getString("rowLocation").contains("A")) {
-                                    iconPath = "C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\first.png";
+                                    iconPath = "C:\\code\\CinemaBooking\\src\\Resources\\first.png";
                                 } else if (rs.getString("rowLocation").contains("B")) {
-                                    iconPath = "C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\second.png";
+                                    iconPath = "C:\\code\\CinemaBooking\\src\\Resources\\second.png";
                                 } else if (rs.getString("rowLocation").contains("C")) {
-                                    iconPath = "C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\third.png";
+                                    iconPath = "C:\\code\\CinemaBooking\\src\\Resources\\third.png";
                                 } else {
                                     // Handle other cases or provide a default icon
-                                    iconPath = "C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\default.png";
+                                    iconPath = "C:\\code\\CinemaBooking\\src\\Resources\\default.png";
                                 }
                                 seatButton[i].setIcon(new ImageIcon(iconPath));
                                 seatButton[i].setBounds((int) x, (int) y, (int) width, (int) height);
@@ -909,7 +915,7 @@ public class MainPage extends javax.swing.JFrame {
                             } else if (rs.getString("statusSeat").equals("Unavailable")) {
                                 seatButton[i].setEnabled(false);
                                 seatButton[i].setText(rs.getString("rowLocation"));
-                                seatButton[i].setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\grey.png"));
+                                seatButton[i].setIcon(new ImageIcon("C:\\code\\CinemaBooking\\src\\Resources\\grey.png"));
                                 seatButton[i].setBounds((int) x, (int) y, (int) width, (int) height);
                                 seatButton[i].setHorizontalTextPosition(JLabel.CENTER);
                                 seatButton[i].setVerticalTextPosition(JLabel.CENTER);
@@ -986,14 +992,22 @@ public class MainPage extends javax.swing.JFrame {
         getID_Digit();
         
     }//GEN-LAST:event_paymentTableMouseClicked
+        
+    
+   
     private void payButtonActionPerformed(java.awt.event.ActionEvent evt, double totalPay) {                                          
         // TODO add your handling code here:
-        createPayFrame(totalPay);
+        if (isPaying == false)
+        {
+            createPayFrame(totalPay);
+        }
+        
     }               
     
     
     private void createPayFrame(double totalPay)
     {
+        isPaying = true;
         JFrame paymentFrame = new JFrame();
         paymentFrame.setSize(500, 200);
         paymentFrame.setLocationRelativeTo(null);
@@ -1163,17 +1177,17 @@ public class MainPage extends javax.swing.JFrame {
                                         "userName = ? " +
                                 ") " +
                                 "SELECT " +
-                                    "cinemaName, " +
-                                    "auditoriumName, " +
-                                    "movieName, " +
+                                    "cinemaName AS 'Cinema', " +
+                                    "auditoriumName AS 'Auditorium', " +
+                                    "movieName AS 'Movie', " +
                                     "STUFF(( " +
                                         "SELECT ', ' + rowLocation " +
                                         "FROM RankedSeats RS " +
                                         "WHERE RS.scheduleID = R.scheduleID " +
                                         "AND RS.formattedReserveDate = R.formattedReserveDate " +
                                         "FOR XML PATH(''), TYPE " +
-                                    ").value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS rowLocations, " +
-                                    "MAX(formattedReserveDate) AS reserveDate " +
+                                    ").value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS 'Seat', " +
+                                    "MAX(formattedReserveDate) AS 'Date' " +
                                 "FROM " +
                                     "RankedSeats R " +
                                 "GROUP BY " +
@@ -1675,7 +1689,7 @@ public class MainPage extends javax.swing.JFrame {
         {
             if (ticketSelected < maxTickets) 
             {
-                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\grey.png"));
+                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\src\\Resources\\grey.png"));
                 ticketSelected++;
                 rowLocation_Q.add(seat.getText());
                 takeOrder(seat.isSelected(), auID, scheID);
@@ -1689,15 +1703,15 @@ public class MainPage extends javax.swing.JFrame {
         {
             if (seat.getText().contains("A")) 
             {
-                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\first.png"));
+                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\src\\Resources\\first.png"));
             } 
             else if (seat.getText().contains("B")) 
             {
-                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\second.png"));
+                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\src\\Resources\\second.png"));
             } 
             else if (seat.getText().contains("C")) 
             {
-                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\CinemaBooking\\src\\Resources\\third.png"));
+                seat.setIcon(new ImageIcon("C:\\code\\CinemaBooking\\src\\Resources\\third.png"));
             }
             rowLocation_Q.add(seat.getText());
 
@@ -1769,6 +1783,10 @@ public class MainPage extends javax.swing.JFrame {
                            "VALUES (?, ?, ?, ?, ?)";
     String insertTicket = "INSERT INTO Tickets(reserveID, seatID) VALUES (?, ?)";
     
+    String updateTicketSold = "Update Schedule " +
+                              "SET ticketsSold= ticketsSold + ? " +
+                              "WHERE scheduleID=? ";
+    
     try {
         Connector con = Connector.getInstance();
         PreparedStatement prepare = null;
@@ -1810,6 +1828,12 @@ public class MainPage extends javax.swing.JFrame {
         prepare.setInt(1, reserveID);
         prepare.setInt(2, seatID);
         prepare.executeUpdate();  
+        
+        // Update tickets sold
+        prepare = con.getConnection().prepareStatement(updateTicketSold);
+        prepare.setInt(1, maxTickets);
+        prepare.setInt(2, scheID);
+        prepare.executeUpdate();
         con.closeConnection();
     } catch (Exception e) {
         System.out.println("Error: " + e.getMessage());

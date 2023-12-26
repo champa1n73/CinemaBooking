@@ -8,6 +8,7 @@ import java.awt.Window;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -263,6 +264,35 @@ public class SignUp extends javax.swing.JFrame {
                     prepare.setString(4, lname.getText());
                     
                     prepare.execute();
+                    
+                    boolean isDuplicate = true;
+                    
+                    while(isDuplicate == true)
+                    {
+                        Random random = new Random();
+                        int min = 10000000;
+                        int max = 99999999;
+                        int randomNumber = random.nextInt(max - min + 1) + min;
+                        String checkBank = "Select B.bankNumber " +
+                                       "From bankAccount B " +
+                                       "Where bankNumber=? ";
+                        prepare = con.prepareStatement(checkBank);
+                        prepare.setInt(1, randomNumber);
+                        
+                        ResultSet rs = prepare.executeQuery();
+                        if(!rs.next())
+                        {
+                            String insertBank = "INSERT INTO bankAccount(userName, bankNumber, bankMoney, bankOTP) VALUES(?,?,?,?)";
+                            prepare = con.prepareStatement(insertBank);
+                            prepare.setString(1, uname.getText());
+                            prepare.setInt(2, randomNumber);
+                            prepare.setInt(3, 50000);
+                            prepare.setInt(4, 123);
+                            prepare.execute();
+                            isDuplicate = false;
+                        }
+                    }
+
             
                     showMessageDialog(null, "New account has been created successfully!");
             
