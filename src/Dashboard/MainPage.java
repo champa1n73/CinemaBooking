@@ -1831,7 +1831,7 @@ public class MainPage extends javax.swing.JFrame {
         
         // Update tickets sold
         prepare = con.getConnection().prepareStatement(updateTicketSold);
-        prepare.setInt(1, maxTickets);
+        prepare.setInt(1, 1);
         prepare.setInt(2, scheID);
         prepare.executeUpdate();
         con.closeConnection();

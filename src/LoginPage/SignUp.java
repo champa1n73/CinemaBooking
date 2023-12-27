@@ -300,6 +300,12 @@ public class SignUp extends javax.swing.JFrame {
                     lname.setText("");
                     uname.setText("");    
                     password.setText("");
+                    
+                    LoginForm LoginFrame = new LoginForm();
+                    LoginFrame.setVisible(true);
+                    LoginFrame.pack();
+                    LoginFrame.setLocationRelativeTo(null); 
+                    this.dispose();
                 }
 
             }
